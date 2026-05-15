@@ -1,0 +1,286 @@
+{
+  "nav": {
+    "how": "How It Works",
+    "demo": "Demo",
+    "history": "Dynamics",
+    "benefits": "Benefits",
+    "cta": "Try It"
+  },
+  "a11y": {
+    "skip_nav": "Skip to content",
+    "nav_main": "Main navigation"
+  },
+  "hero": {
+    "badge": "PANAS Scale Based Analysis",
+    "title_accent": "mood",
+    "title_start": "Discover your",
+    "title_rest": " in 2 minutes",
+    "sub": "Psychometric analysis of positive and negative affect with an adaptive interface that changes to match your state",
+    "btn": "Try Now",
+    "is_test": "Your Test Results",
+    "is_default": "Default Theme",
+    "index_label": "Well-being Index"
+  },
+  "how": {
+    "tag": "Process",
+    "title": "How It Works",
+    "desc": "Three simple steps to understanding your emotional state",
+    "step1_title": "Take the PANAS Test",
+    "step1_desc": "Answer questions based on the adapted PANAS scale. Takes 1–2 minutes",
+    "step2_title": "Get Analysis",
+    "step2_desc": "The algorithm determines positive and negative affect levels with detailed metrics",
+    "step3_title": "Adaptive Interface",
+    "step3_desc": "The design changes to match your state — colors, shapes, and animations become personalized"
+  },
+  "demo": {
+    "tag": "Interactive Demo",
+    "title": "Try It Now",
+    "desc": "Choose your mood manually or take a test for accurate analysis",
+    "quiz_label": "Want a more accurate analysis?",
+    "quiz_btn": "Take PANAS Test (10 questions)",
+    "divider": "or choose immediately",
+    "question": "How are you feeling right now?",
+    "options": {
+      "happy": { "name": "Happy", "desc": "Energetic and inspired" },
+      "calm": { "name": "Calm", "desc": "Relaxed and focused" },
+      "stressed": { "name": "Stressed", "desc": "Tense and exhausted" },
+      "neutral": { "name": "Neutral", "desc": "Balanced state" }
+    },
+    "results": {
+      "happy": {
+        "badge": "Active Mode: Happy",
+        "text": "You're in a great mood! The interface has become brighter and warmer — reflecting your current state."
+      },
+      "calm": {
+        "badge": "Active Mode: Calm",
+        "text": "Ideal state for deep work. Green tones and soft shapes help you maintain your focus."
+      },
+      "stressed": {
+        "badge": "Active Mode: Stressed",
+        "text": "Tension detected. We've activated a dark theme and muted colors to reduce visual and cognitive load."
+      },
+      "neutral": {
+        "badge": "Active Mode: Neutral",
+        "text": "A balanced state. The interface uses standard accents for comfortable and productive daily work."
+      }
+    },
+    "tags": {
+      "palette": "Color Palette",
+      "shapes": "Element Shapes",
+      "density": "Visual Density",
+      "anim": "Animations"
+    }
+  },
+  "quiz": {
+    "title": "PANAS Test",
+    "subtitle": "Affect Scale",
+    "close": "Close",
+    "progress": "Progress",
+    "question": "Question",
+    "question_count": "questions",
+    "minutes": "minutes",
+    "next": "Next",
+    "finish": "See Results",
+    "pa_label": "Positive Affect (PA)",
+    "na_label": "Negative Affect (NA)",
+    "start_title": "Emotional State Analysis",
+    "start_desc": "Answer honestly — there are no right or wrong answers. This helps the system adapt.",
+    "start_desc_prefix": "Answer",
+    "start_desc_suffix": " honestly. Takes only ",
+    "start_btn": "Start Test",
+    "apply": "Apply Theme",
+    "retake": "Retake Test",
+    "export_pdf": "Download PDF",
+    "total_index": "Mood Index",
+    "index_formula": "Total Index = (PA - NA) / (PA + NA)",
+    "pdf_date": "Date",
+    "pdf_metrics_title": "Detailed metrics (PANAS):",
+    "pdf_footer": "Report generated automatically by MoodFlow. Data is confidential.",
+    "description": {
+      "happy": "High level of positive affect: enthusiasm and energy. Your state promotes creativity.",
+      "calm": "A state of calm and stability. Best time for balanced and deep work.",
+      "neutral": "Balanced state. Resources are normal, no expressed emotional swings.",
+      "stressed": "Increased level of tension. We recommend slowing down and focusing on rest."
+    },
+    "quiz": {
+      "questions": {
+        "q1": {
+          "text": "How attentive and interested are you in what is happening around you right now?",
+          "a1": "Very — I notice details, thoughts are clear",
+          "a2": "Not bad — focused if needed",
+          "a3": "A bit distracted, mind is wandering",
+          "a4": "Can't focus at all"
+        },
+        "q2": {
+          "text": "How would you describe your level of enthusiasm and inspiration right now?",
+          "a1": "I am full of inspiration and want to act",
+          "a2": "There is a desire, though without much of a lift",
+          "a3": "Neutral — neither enthusiasm nor aversion",
+          "a4": "No inspiration at all, everything seems futile"
+        },
+        "q3": {
+          "text": "How physically and emotionally strong do you feel right now?",
+          "a1": "I feel strength and lightness in my body",
+          "a2": "Calm and stable, without overexertion",
+          "a3": "A bit exhausted, but holding on",
+          "a4": "Complete fatigue, no strength"
+        },
+        "q4": {
+          "text": "How active and productive are you today?",
+          "a1": "Very active — I've already done a lot",
+          "a2": "Methodically performing tasks",
+          "a3": "Moving slowly, no rush",
+          "a4": "Just want to lie down and do nothing"
+        },
+        "q5": {
+          "text": "How much nervousness or anxiety do you feel right now?",
+          "a1": "Completely calm, no anxiety",
+          "a2": "There is a slight worry, but controlled",
+          "a3": "Noticeable anxiety, hard to relax",
+          "a4": "Severe anxiety or panic"
+        },
+        "q6": {
+          "text": "How do you react when something goes wrong or someone irritates you?",
+          "a1": "Calmly — I adapt easily",
+          "a2": "A bit upset, but calm down quickly",
+          "a3": "I feel irritated, hard to hold back",
+          "a4": "Strong anger or a sense of hopelessness"
+        },
+        "q7": {
+          "text": "Do you feel any distress or emotional heaviness right now?",
+          "a1": "No — I feel light and positive",
+          "a2": "Neutral state, no particular emotions",
+          "a3": "There is a slight sadness or fatigue from the day",
+          "a4": "I feel distressed or empty"
+        },
+        "q8": {
+          "text": "Do you have a sense of satisfaction with yourself or your actions today?",
+          "a1": "Yes — I am satisfied with what I've done",
+          "a2": "There is a calm satisfaction without much joy",
+          "a3": "Neither special satisfaction nor dissatisfaction",
+          "a4": "Rather dissatisfied or disappointed"
+        },
+        "q9": {
+          "text": "If you could describe your overall mood in one word, it would be...",
+          "a1": "Happy / Inspired — full of positive energy",
+          "a2": "Calm / Balanced — quiet and comfortable",
+          "a3": "Neutral / Normal — nothing special",
+          "a4": "Tense / Tired — feeling pressure"
+        },
+        "q10": {
+          "text": "How determined and confident are you in your actions today?",
+          "a1": "Very — I know what I want and how to achieve it",
+          "a2": "There is a plan, but also doubts",
+          "a3": "Not sure what to do next",
+          "a4": "Feeling confused or afraid of making a mistake"
+        }
+      }
+    }
+  },
+  "benefits": {
+    "tag": "Benefits",
+    "title": "Why MoodFlow?",
+    "desc": "We combined evidence-based psychometrics with modern design technologies",
+    "b1_title": "Scientific Approach",
+    "b1_desc": "We use the valid PANAS scale for accurate determination of your emotional state.",
+    "b2_title": "Adaptive UI",
+    "b2_desc": "The interface is not just a picture, but a living organism that adapts to you.",
+    "b3_title": "Personalization",
+    "b3_desc": "Every aspect of the design works for your comfort and productivity.",
+    "b4_title": "Privacy",
+    "b4_desc": "Your answers are local and anonymous. We care about your data security."
+  },
+  "audience": {
+    "tag": "Who is it for",
+    "title": "Audience",
+    "desc": "MoodFlow is created for people who want to understand themselves better",
+    "s1_title": "Students",
+    "s1_desc": "Manage stress during exams. Adapt the environment for better concentration",
+    "s2_title": "Creative Pros",
+    "s2_desc": "Find inspiration and maintain creative flow. The environment adapts to your rhythm",
+    "s3_title": "Remote Workers",
+    "s3_desc": "Create a comfortable workspace remotely. Increase productivity and reduce fatigue"
+  },
+  "history": {
+    "tag": "Analytics",
+    "title": "Your Mood Dynamics",
+    "desc": "Visualization of your affective profile based on the PANAS scale. Data is stored locally.",
+    "empty_main": "Charts will appear here after your first test",
+    "empty_sub": "Take the PANAS test to start tracking your results",
+    "stats": {
+      "tests_count": "Tests taken",
+      "avg_index": "Average index",
+      "last_state": "Last state"
+    },
+    "tabs": {
+      "radar": "Radar Chart",
+      "line": "Line Chart"
+    },
+    "chart_title": "Average Affective Profile (PANAS)",
+    "chart_desc": "Average values based on recent tests",
+    "line_title": "Score Dynamics",
+    "line_desc": "Changes in PA and NA levels over time",
+    "radar_name": "Your profile",
+    "value_label": "Value",
+    "clear_btn": "Clear History"
+  },
+  "testimonials": {
+    "tag": "Reviews",
+    "title": "What Users Say",
+    "desc": "Over 10,000 people already use MoodFlow",
+    "items": {
+      "olena": {
+        "text": "MoodFlow helps me understand my emotional state better. Now I see patterns and can manage stress in advance. The adaptive interface is incredible!",
+        "name": "Elena K.",
+        "role": "UX Designer"
+      },
+      "max": {
+        "text": "This is a lifesaver during finals! Now I can quickly track my stress level and adapt my workspace. Highly recommend to all students!",
+        "name": "Max P.",
+        "role": "Student"
+      },
+      "anna": {
+        "text": "I didn't think design could affect productivity so much. After MoodFlow, I noticed I work 40% more efficiently in the right environment!",
+        "name": "Anna S.",
+        "role": "Content Manager"
+      }
+    }
+  },
+  "scales": {
+    "joy": "Joy",
+    "calm": "Calm",
+    "energy": "Energy",
+    "focus": "Focus",
+    "stress": "Stress"
+  },
+  "mood_switcher": {
+    "label": "Mood"
+  },
+  "mood": {
+    "neutral": "Neutral",
+    "happy": "Happy",
+    "calm": "Calm",
+    "stressed": "Stressed"
+  },
+  "cta": {
+    "title": "Try It Now",
+    "desc": "Feel how the interface adapts to your state. Choose a mood or take a quick test in the demo section.",
+    "btn_single": "Try Demo",
+    "note": "Free - No registration - Instant result"
+  },
+  "footer": {
+    "brand_desc": "Intelligent mood analysis with an adaptive interface for a comfortable day",
+    "nav": "Navigation",
+    "info": "Information",
+    "links": {
+      "about": "About Project",
+      "privacy": "Privacy",
+      "terms": "Terms of Use",
+      "contacts": "Contacts"
+    },
+    "copyright": "© 2026 MoodFlow. All rights reserved. Coursework by M. Linevych."
+  },
+  "common": {
+    "location": "Kyiv, Ukraine UA"
+  }
+}

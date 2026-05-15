@@ -1,0 +1,130 @@
+export const getLocalizedQuestions = (t) => [
+  {
+    id: 1,
+    panas: 'PA',
+    construct: 'attentive',
+    text: t('quiz.quiz.questions.q1.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q1.a1'), scores: { joy: 6, calm: 5, energy: 6, focus: 10, stress: 1 } },
+      { text: t('quiz.quiz.questions.q1.a2'), scores: { joy: 4, calm: 6, energy: 4, focus: 7, stress: 2 } },
+      { text: t('quiz.quiz.questions.q1.a3'), scores: { joy: 2, calm: 3, energy: 3, focus: 3, stress: 5 } },
+      { text: t('quiz.quiz.questions.q1.a4'), scores: { joy: 1, calm: 1, energy: 2, focus: 1, stress: 9 } },
+    ],
+  },
+  {
+    id: 2,
+    panas: 'PA',
+    construct: 'enthusiastic',
+    text: t('quiz.quiz.questions.q2.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q2.a1'), scores: { joy: 9, calm: 3, energy: 10, focus: 7, stress: 1 } },
+      { text: t('quiz.quiz.questions.q2.a2'), scores: { joy: 5, calm: 5, energy: 6, focus: 6, stress: 2 } },
+      { text: t('quiz.quiz.questions.q2.a3'), scores: { joy: 3, calm: 5, energy: 3, focus: 4, stress: 3 } },
+      { text: t('quiz.quiz.questions.q2.a4'), scores: { joy: 1, calm: 1, energy: 1, focus: 1, stress: 9 } },
+    ],
+  },
+  {
+    id: 3,
+    panas: 'PA',
+    construct: 'strong',
+    text: t('quiz.quiz.questions.q3.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q3.a1'), scores: { joy: 7, calm: 4, energy: 10, focus: 6, stress: 1 } },
+      { text: t('quiz.quiz.questions.q3.a2'), scores: { joy: 4, calm: 9, energy: 5, focus: 6, stress: 1 } },
+      { text: t('quiz.quiz.questions.q3.a3'), scores: { joy: 2, calm: 3, energy: 3, focus: 3, stress: 6 } },
+      { text: t('quiz.quiz.questions.q3.a4'), scores: { joy: 1, calm: 1, energy: 1, focus: 1, stress: 10 } },
+    ],
+  },
+  {
+    id: 4,
+    panas: 'PA',
+    construct: 'active',
+    text: t('quiz.quiz.questions.q4.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q4.a1'), scores: { joy: 7, calm: 3, energy: 10, focus: 8, stress: 2 } },
+      { text: t('quiz.quiz.questions.q4.a2'), scores: { joy: 4, calm: 8, energy: 6, focus: 8, stress: 2 } },
+      { text: t('quiz.quiz.questions.q4.a3'), scores: { joy: 3, calm: 6, energy: 3, focus: 3, stress: 3 } },
+      { text: t('quiz.quiz.questions.q4.a4'), scores: { joy: 2, calm: 4, energy: 1, focus: 1, stress: 6 } },
+    ],
+  },
+  {
+    id: 5,
+    panas: 'NA',
+    construct: 'nervous',
+    text: t('quiz.quiz.questions.q5.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q5.a1'), scores: { joy: 5, calm: 10, energy: 4, focus: 7, stress: 1 } },
+      { text: t('quiz.quiz.questions.q5.a2'), scores: { joy: 3, calm: 6, energy: 4, focus: 5, stress: 4 } },
+      { text: t('quiz.quiz.questions.q5.a3'), scores: { joy: 1, calm: 2, energy: 3, focus: 3, stress: 7 } },
+      { text: t('quiz.quiz.questions.q5.a4'), scores: { joy: 1, calm: 1, energy: 2, focus: 1, stress: 10 } },
+    ],
+  },
+  {
+    id: 6,
+    panas: 'NA',
+    construct: 'hostile',
+    text: t('quiz.quiz.questions.q6.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q6.a1'), scores: { joy: 6, calm: 9, energy: 5, focus: 8, stress: 1 } },
+      { text: t('quiz.quiz.questions.q6.a2'), scores: { joy: 3, calm: 5, energy: 4, focus: 6, stress: 3 } },
+      { text: t('quiz.quiz.questions.q6.a3'), scores: { joy: 1, calm: 2, energy: 6, focus: 2, stress: 8 } },
+      { text: t('quiz.quiz.questions.q6.a4'), scores: { joy: 1, calm: 1, energy: 3, focus: 1, stress: 10 } },
+    ],
+  },
+  {
+    id: 7,
+    panas: 'NA',
+    construct: 'distressed',
+    text: t('quiz.quiz.questions.q7.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q7.a1'), scores: { joy: 10, calm: 5, energy: 8, focus: 6, stress: 1 } },
+      { text: t('quiz.quiz.questions.q7.a2'), scores: { joy: 3, calm: 5, energy: 4, focus: 5, stress: 3 } },
+      { text: t('quiz.quiz.questions.q7.a3'), scores: { joy: 1, calm: 2, energy: 2, focus: 2, stress: 7 } },
+      { text: t('quiz.quiz.questions.q7.a4'), scores: { joy: 1, calm: 1, energy: 1, focus: 1, stress: 9 } },
+    ],
+  },
+  {
+    id: 8,
+    panas: 'PA',
+    construct: 'proud',
+    text: t('quiz.quiz.questions.q8.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q8.a1'), scores: { joy: 10, calm: 5, energy: 7, focus: 6, stress: 1 } },
+      { text: t('quiz.quiz.questions.q8.a2'), scores: { joy: 4, calm: 9, energy: 3, focus: 5, stress: 1 } },
+      { text: t('quiz.quiz.questions.q8.a3'), scores: { joy: 3, calm: 4, energy: 3, focus: 4, stress: 3 } },
+      { text: t('quiz.quiz.questions.q8.a4'), scores: { joy: 1, calm: 1, energy: 2, focus: 2, stress: 8 } },
+    ],
+  },
+  {
+    id: 9,
+    panas: 'PA',
+    construct: 'inspired',
+    text: t('quiz.quiz.questions.q9.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q9.a1'), scores: { joy: 10, calm: 4, energy: 9, focus: 5, stress: 1 } },
+      { text: t('quiz.quiz.questions.q9.a2'), scores: { joy: 4, calm: 10, energy: 3, focus: 7, stress: 1 } },
+      { text: t('quiz.quiz.questions.q9.a3'), scores: { joy: 3, calm: 5, energy: 3, focus: 5, stress: 4 } },
+      { text: t('quiz.quiz.questions.q9.a4'), scores: { joy: 1, calm: 1, energy: 3, focus: 2, stress: 10 } },
+    ],
+  },
+  {
+    id: 10,
+    panas: 'PA',
+    construct: 'determined',
+    text: t('quiz.quiz.questions.q10.text'),
+    answers: [
+      { text: t('quiz.quiz.questions.q10.a1'), scores: { joy: 7, calm: 5, energy: 8, focus: 10, stress: 1 } },
+      { text: t('quiz.quiz.questions.q10.a2'), scores: { joy: 4, calm: 5, energy: 5, focus: 7, stress: 3 } },
+      { text: t('quiz.quiz.questions.q10.a3'), scores: { joy: 2, calm: 3, energy: 3, focus: 3, stress: 6 } },
+      { text: t('quiz.quiz.questions.q10.a4'), scores: { joy: 1, calm: 1, energy: 2, focus: 2, stress: 9 } },
+    ],
+  },
+];
+
+export const SCALE_TO_MOOD = {
+  joy: 'happy',
+  calm: 'calm',
+  energy: 'happy',
+  focus: 'calm',
+  stress: 'stressed',
+};

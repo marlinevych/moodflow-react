@@ -1,0 +1,35 @@
+{
+  "name": "moodflow",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.115.0",
+    "@react-three/fiber": "^8.17.0",
+    "focus-trap-react": "^12.0.1",
+    "framer-motion": "^12.38.0",
+    "i18next": "^24.0.0",
+    "i18next-http-backend": "^4.0.0",
+    "jspdf": "^2.5.2",
+    "lucide-react": "^1.16.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.0.0",
+    "react-router-dom": "^7.0.0",
+    "recharts": "^2.15.0",
+    "three": "^0.169.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "tailwindcss": "^4.0.0",
+    "vite": "^6.0.0",
+    "vite-plugin-pwa": "^0.21.2"
+  }
+}
