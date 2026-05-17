@@ -46,12 +46,12 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature:     0.7, // Додаємо творчості, щоб тексти були унікальними
+          temperature:     0.7, 
           maxOutputTokens: 1000, 
           topP:            0.95,
           responseMimeType: "application/json",
-          // ПЕРЕДАЄМО СХЕМУ: Це захищає від помилки 400 і змушує Gemini повернути СТРОГИЙ JSON
-          responseSchema: {
+          // Змінено на зміну snake_case для стабільної версії v1 API
+          response_schema: {
             type: "ARRAY",
             items: {
               type: "OBJECT",
@@ -78,7 +78,7 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
     const data = await response.json()
     const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
 
-    // Оскільки ми передали responseSchema, тут ЗАЛІЗНО буде валідний чистий JSON масив
+    // Тепер тут залізно буде чистий, динамічний JSON
     const recommendations = JSON.parse(rawText)
 
     if (!Array.isArray(recommendations) || recommendations.length === 0) {
