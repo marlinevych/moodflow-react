@@ -251,28 +251,53 @@ export default function AIRecommendations({ result, language = 'uk' }) {
               )}
             </div>
             <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {recommendations.map((rec, i) => (
-                <motion.div key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  style={{
-                    display: 'flex', gap: 12, alignItems: 'flex-start',
-                    background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)',
-                    borderRadius: 14, padding: '12px 14px',
-                  }}>
-                  {/* Іконка з Gemini — залишаємо емодзі бо це контентні дані від LLM */}
-                  <span style={{ fontSize: 22, flexShrink: 0, lineHeight: 1.2 }}>{rec.icon ?? '💡'}</span>
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 3 }}>
-                      {rec.title}
+              {recommendations.map((rec, i) => {
+                // Мапимо текстовий тип від Gemini на твої реальні SVG-файли (без початкового слеша)
+                const iconMap = {
+                  light: 'icons/light_white.svg',
+                  brain: 'icons/brain_white.svg',
+                  star:  'icons/star_white.svg',
+                  shield: 'icons/shield.svg'
+                };
+
+                const iconSrc = iconMap[rec.type] || 'icons/light_white.svg';
+
+                return (
+                  <motion.div key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    style={{
+                      display: 'flex', gap: 14, alignItems: 'center', // вирівнюємо по центру для акуратності
+                      background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)',
+                      borderRadius: 14, padding: '14px 16px',
+                    }}>
+                    
+                    {/* Мінімалістичний контейнер для SVG-іконки замість емодзі */}
+                    <div style={{
+                      width: 38, height: 38, borderRadius: 10,
+                      background: 'var(--bg-secondary)', // або твоє фірмове забарвлення
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      <img 
+                        src={iconSrc} 
+                        alt={rec.type} 
+                        style={{ width: 20, height: 20, display: 'block' }} 
+                      />
                     </div>
-                    <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.55, margin: 0 }}>
-                      {rec.text}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+
+                    <div>
+                      <div style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 3 }}>
+                        {rec.title}
+                      </div>
+                      <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.55, margin: 0 }}>
+                        {rec.text}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         )}
