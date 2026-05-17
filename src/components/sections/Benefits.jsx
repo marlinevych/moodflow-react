@@ -2,10 +2,10 @@ import { useTranslation } from 'react-i18next'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
 const BENEFITS = [
-  { icon: '/icons/light_white.svg',  alt: 'bulb',  key: 'b1' },
-  { icon: '/icons/brain_white.svg',  alt: 'brain', key: 'b2' },
-  { icon: '/icons/star_white.svg',   alt: 'star',  key: 'b3' },
-  { icon: '/icons/shield.svg',       alt: 'shield', key: 'b4' },
+  { icon: 'icons/light_white.svg',  alt: 'bulb',  key: 'b1' },
+  { icon: 'icons/brain_white.svg',  alt: 'brain', key: 'b2' },
+  { icon: 'icons/star_white.svg',   alt: 'star',  key: 'b3' },
+  { icon: 'icons/shield.svg',       alt: 'shield', key: 'b4' },
 ]
 
 function BenefitCard({ icon, alt, titleKey, delay }) {

@@ -16,17 +16,17 @@ export default defineConfig({
         "name": "MoodFlow — Дізнайся свій настрій",
         "icons": [
           {
-            "src": "/icons/pwa-192.png",
+            "src": "icons/pwa-192.png",
             "type": "image/png",
             "sizes": "192x192"
           },
           {
-            "src": "/icons/pwa-512.png",
+            "src": "icons/pwa-512.png",
             "type": "image/png",
             "sizes": "512x512"
           }
         ],
-        "start_url": "/",
+        "start_url": "./",
         "background_color": "#ffffff",
         "display": "standalone",
         "theme_color": "#4d00ed"

@@ -8,9 +8,9 @@ import { useScrollReveal } from '../../hooks/useScrollReveal'
  * filter: var(--icon-filter) перефарбовує будь-яку SVG з темного на потрібний колір.
  */
 const STEPS = [
-  { num: '01', icon: '/icons/heart-hand.svg', alt: 'heart', key: 'step1' },
-  { num: '02', icon: '/icons/brain_white.svg', alt: 'brain', key: 'step2' },
-  { num: '03', icon: '/icons/star_white.svg',  alt: 'star',  key: 'step3' },
+  { num: '01', icon: 'icons/heart-hand.svg', alt: 'heart', key: 'step1' },
+  { num: '02', icon: 'icons/brain_white.svg', alt: 'brain', key: 'step2' },
+  { num: '03', icon: 'icons/star_white.svg',  alt: 'star',  key: 'step3' },
 ]
 
 function StepCard({ num, icon, alt, titleKey, descKey, delay }) {
