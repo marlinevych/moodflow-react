@@ -1,5 +1,6 @@
 export const ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY ?? '';
 
+// Використовуємо стабільну модель 2.5 Flash
 const GEMINI_API_URL =
   'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent';
 
@@ -58,59 +59,64 @@ Response format — JSON array of objects:
 
 JSON only, no explanations.`
 }
+
 export async function getRecommendations({ apiKey, scores, totalIndex, mood, language = 'uk' }) {
   if (!apiKey) throw new Error('NO_API_KEY')
 
   const prompt = buildPrompt(scores, totalIndex, mood, language)
 
-  const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature:     0.7,
-        maxOutputTokens: 600,
-        topP:            0.9,
-      }
-  }),
-  })
-
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({}))
-    // Виведемо точну причину відхилення від Google в консоль, щоб ми не гадали
-    console.error('Деталі помилки від Google:', err)
-    
-    if (response.status === 400) throw new Error('INVALID_KEY')
-    if (response.status === 429) throw new Error('RATE_LIMIT')
-    throw new Error(err?.error?.message ?? 'API_ERROR')
-  }
-
-  const data = await response.json()
-  const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
-
-  rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim()
-
-  // 2. Шукаємо масив [ ... ] за допомогою регулярного виразу
-  const jsonMatch = rawText.match(/\[[\s\S]*\]/)
-  if (!jsonMatch) {
-    console.error("Отриманий текст не містить JSON масиву:", rawText)
-    throw new Error('PARSE_ERROR')
-  }
-
-  // 3. Безпечно парсимо очищений JSON
-  let recommendations;
+  // Обгортаємо ВСЕ в один великий try-catch, щоб зловити будь-яке блокування мережі
   try {
-    recommendations = JSON.parse(jsonMatch[0])
-  } catch (parseExc) {
-    console.error("Помилка всередині JSON.parse:", parseExc, "Текст:", jsonMatch[0])
-    throw new Error('PARSE_ERROR')
-  }
+    const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature:     0.7,
+          maxOutputTokens: 600,
+          topP:            0.9,
+        },
+      }),
+    }); // Тут синтаксис виправлено!
 
-  // Валідуємо структуру
-  if (!Array.isArray(recommendations) || recommendations.length === 0) {
-    throw new Error('EMPTY_RESPONSE')
-  }
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}))
+      console.error('Деталі помилки ВІД СЕРВЕРА Google:', err)
+      
+      if (response.status === 400) throw new Error('INVALID_KEY')
+      if (response.status === 429) throw new Error('RATE_LIMIT')
+      throw new Error(err?.error?.message ?? 'API_ERROR')
+    }
 
-  return recommendations.slice(0, 4) // максимум 4 рекомендації
+    const data = await response.json()
+    let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+
+    rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim()
+
+    const jsonMatch = rawText.match(/\[[\s\S]*\]/)
+    if (!jsonMatch) {
+      console.error("Отриманий текст не містить JSON масиву:", rawText)
+      throw new Error('PARSE_ERROR')
+    }
+
+    let recommendations;
+    try {
+      recommendations = JSON.parse(jsonMatch[0])
+    } catch (parseExc) {
+      console.error("Помилка всередині JSON.parse:", parseExc, "Текст:", jsonMatch[0])
+      throw new Error('PARSE_ERROR')
+    }
+
+    if (!Array.isArray(recommendations) || recommendations.length === 0) {
+      throw new Error('EMPTY_RESPONSE')
+    }
+
+    return recommendations.slice(0, 4)
+
+  } catch (globalError) {
+    // Якщо запит впаде через CORS або заблокований IP, цей лог ЗАЛІЗНО виведе причину в консоль
+    console.error('КРИТИЧНА ПОМИЛКА ДЕ СТАВСЯ ЗБІЙ:', globalError)
+    throw new Error('API_ERROR')
+  }
 }
