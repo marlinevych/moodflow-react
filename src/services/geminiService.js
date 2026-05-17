@@ -1,7 +1,8 @@
 export const ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY ?? '';
 
+// Оновлюємо на стабільну модель 2.0 або 2.5 Flash під твою Pro-підписку
 const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
+  'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent';
 
 function buildPrompt(scores, totalIndex, mood, language = 'uk') {
   const moodLabels = {
@@ -24,7 +25,7 @@ function buildPrompt(scores, totalIndex, mood, language = 'uk') {
 
   if (lang === 'uk') {
     return `Ти — психолог-консультант, що спеціалізується на управлінні емоційним станом.
-Користувач пройшов адаптований тест PANAS (Positive and Negative Affect Schedule).
+Користувач пройшов адаптований тест PANAS.
 
 Результати тесту:
 - Загальний афективний стан: ${moods[mood]}
@@ -33,12 +34,12 @@ function buildPrompt(scores, totalIndex, mood, language = 'uk') {
 
 Надай короткі персоналізовані рекомендації (3-4 пункти) що допоможуть покращити або підтримати поточний емоційний стан.
 
-Формат відповіді — JSON масив об'єктів (строго дотримуйся синтаксису ком):
+Формат відповіді — JSON масив об'єктів (строго дотримуйся структури ключі-значення):
 [
   { "icon": "emoji", "title": "Коротка назва (3-4 слова)", "text": "Рекомендація (1-2 речення)" }
 ]
 
-Тільки чистий JSON, без маркдауну та без твоїх пояснень.`
+Тільки чистий JSON, без твоїх пояснень.`
   }
 
   return `You are a psychological counselor specializing in emotional state management.
@@ -56,9 +57,8 @@ Response format — JSON array of objects:
   { "icon": "emoji", "title": "Short title (3-4 words)", "text": "Recommendation (1-2 sentences)" }
 ]
 
-JSON only, no explanations. Emojis should match the recommendation theme.`
+JSON only, no explanations.`
 }
-
 export async function getRecommendations({ apiKey, scores, totalIndex, mood, language = 'uk' }) {
   if (!apiKey) throw new Error('NO_API_KEY')
 
