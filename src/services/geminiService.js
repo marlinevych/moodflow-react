@@ -16,7 +16,7 @@
  *   є напрямом досліджень у галузі affective computing та
  *   human-computer interaction (HCI).
  */
-
+export const ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY ?? '';
 const GEMINI_API_URL =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
 
@@ -61,10 +61,10 @@ function buildPrompt(scores, totalIndex, mood, language = 'uk') {
 
 Формат відповіді — JSON масив об'єктів:
 [
-  { "icon": "emoji", "title": "Коротка назва (3-4 слова)", "text": "Рекомендація (1-2 речення)" }
+  { "icon": "title": "Коротка назва (3-4 слова)", "text": "Рекомендація (1-2 речення)" }
 ]
 
-Тільки JSON, без пояснень. Емодзі мають відповідати темі рекомендації.`
+Тільки JSON, без пояснень.`
   }
 
   return `You are a psychological counselor specializing in emotional state management.
@@ -80,10 +80,10 @@ Provide brief personalized recommendations (3-4 points) to improve or maintain t
 
 Response format — JSON array of objects:
 [
-  { "icon": "emoji", "title": "Short title (3-4 words)", "text": "Recommendation (1-2 sentences)" }
+  { "icon": "title": "Short title (3-4 words)", "text": "Recommendation (1-2 sentences)" }
 ]
 
-JSON only, no explanations. Emojis should match the recommendation theme.`
+JSON only, no explanations. Icons should match the recommendation theme.`
 }
 
 /**
@@ -111,6 +111,7 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
         temperature:     0.7,   // баланс між творчістю і точністю
         maxOutputTokens: 600,   // достатньо для 4 рекомендацій
         topP:            0.9,
+        responseMimeType: "application/json",
       },
       safetySettings: [
         { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_NONE' },

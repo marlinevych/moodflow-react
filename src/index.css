@@ -476,6 +476,28 @@ footer { background: var(--footer-bg); color: rgba(255,255,255,0.7); padding: 60
 .btn-retake { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text-secondary); padding: 14px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 15px; font-weight: 600; border: 2px solid var(--bg-card-border); cursor: pointer; transition: var(--transition); }
 .btn-retake:hover { border-color: var(--accent2); color: var(--text-primary); }
 
+/* ── Кнопка PDF export ───────────────────────────────────── */
+.btn-export-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--accent);
+  padding: 14px 24px;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  border: 2px solid var(--accent);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-export-pdf:hover {
+  background: var(--bg-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
 /* ── History / Charts section ────────────────────────────── */
 #history { background: var(--bg-primary); transition: var(--transition); }
 .history-empty { text-align: center; padding: 60px 0; color: var(--text-muted); font-size: 16px; }

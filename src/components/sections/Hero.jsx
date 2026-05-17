@@ -1,20 +1,32 @@
-import { useTranslation } from 'react-i18next' // Додаємо імпорт
+import { useTranslation } from 'react-i18next'
+import { Sparkle, ArrowRight } from '@phosphor-icons/react'
 import { useMoodStore } from '../../store/useMoodStore'
 import { MOODS } from '../../data/moods'
 
-// Використовуємо ключі зі сторінки перекладів замість жорсткого тексту
 const BAR_LABELS = ['scales.joy', 'scales.calm', 'scales.energy', 'scales.focus']
 
+/* Phosphor-іконка в орбі замість емодзі (коли немає результату тесту) */
+const MOOD_ORB_ICONS = {
+  neutral:  <Sparkle size={52} weight="duotone" color="white" />,
+  happy:    <Sparkle size={52} weight="fill"    color="white" />,
+  calm:     <Sparkle size={52} weight="thin"    color="white" />,
+  stressed: <Sparkle size={52} weight="bold"    color="white" />,
+}
+
 export default function Hero() {
-  const { t } = useTranslation() // Оголошуємо функцію t
+  const { t } = useTranslation()
   const currentMood = useMoodStore((s) => s.currentMood)
   const lastResult  = useMoodStore((s) => s.lastResult)
 
-  const moodData = MOODS[currentMood] ?? MOODS.neutral
-
+  const moodData    = MOODS[currentMood] ?? MOODS.neutral
   const isTestResult = lastResult?.mood === currentMood
 
-  const emoji = isTestResult ? lastResult.emoji : moodData.emoji
+  /* Якщо є результат тесту — показуємо емодзі з результату,
+     якщо прямий вибір — показуємо Phosphor іконку */
+  const orbContent = isTestResult
+    ? <span style={{ fontSize: 48 }}>{lastResult.emoji}</span>
+    : MOOD_ORB_ICONS[currentMood] ?? MOOD_ORB_ICONS.neutral
+
   const score = isTestResult ? lastResult.score : moodData.score
   const bars  = isTestResult ? lastResult.bars  : moodData.bars
 
@@ -33,40 +45,40 @@ export default function Hero() {
         <div className="hero-grid">
 
           <div className="hero-content">
+            {/* Бейдж — Phosphor Sparkle замість ✨ */}
             <div className="hero-badge">
-              <span>✨</span>
+              <Sparkle size={16} weight="fill" />
               {t('hero.badge')}
             </div>
+
             <h1>
-              {t('hero.title_start')} <span className="accent">{t('hero.title_accent')}</span> {t('hero.title_rest')}
+              {t('hero.title_start')}{' '}
+              <span className="accent">{t('hero.title_accent')}</span>{' '}
+              {t('hero.title_rest')}
             </h1>
-            <p className="hero-sub">
-              {t('hero.sub')}
-            </p>
+            <p className="hero-sub">{t('hero.sub')}</p>
+
             <button className="btn-primary" onClick={scrollToDemo}>
               {t('hero.btn')}
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
+              <ArrowRight size={20} weight="bold" />
             </button>
           </div>
 
           <div className="hero-visual">
             <div className="hero-card">
+
+              {/* Орб — Phosphor іконка або емодзі з тесту */}
               <div className="mood-orb">
-                <span key={emoji}>{emoji}</span>
+                {orbContent}
               </div>
 
+              {/* Шкали */}
               <div className="mood-bars">
                 {BAR_LABELS.map((labelKey, i) => (
                   <div className="mood-bar-row" key={labelKey}>
-                    {/* Використовуємо t() для назв шкал */}
                     <span>{t(labelKey)}</span>
                     <div className="mood-bar-track">
-                      <div
-                        className="mood-bar-fill"
-                        style={{ width: `${bars[i]}%` }}
-                      />
+                      <div className="mood-bar-fill" style={{ width: `${bars[i]}%` }} />
                     </div>
                     <span>{bars[i]}%</span>
                   </div>
@@ -78,13 +90,7 @@ export default function Hero() {
                 {t('hero.index_label')}
               </div>
 
-              <div style={{
-                marginTop: 12,
-                fontSize: 11,
-                color: 'var(--text-muted)',
-                textAlign: 'center',
-                opacity: 0.7,
-              }}>
+              <div style={{ marginTop: 12, fontSize: 11, color: 'var(--text-muted)', textAlign: 'center', opacity: 0.7 }}>
                 {isTestResult ? t('hero.is_test') : t('hero.is_default')}
               </div>
 

@@ -1,21 +1,23 @@
 import { useTranslation } from 'react-i18next'
+import { GraduationCap, PaintBrush, Briefcase } from '@phosphor-icons/react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
-// Залишаємо лише емодзі та технічний ідентифікатор для ключів перекладу
 const AUDIENCE_ITEMS = [
-  { id: 's1', emoji: '🎓' },
-  { id: 's2', emoji: '🎨' },
-  { id: 's3', emoji: '💼' },
+  { id: 's1', Icon: GraduationCap },
+  { id: 's2', Icon: PaintBrush    },
+  { id: 's3', Icon: Briefcase     },
 ]
 
-function AudienceCard({ id, emoji, delay }) {
+function AudienceCard({ id, Icon, delay }) {
   const { t } = useTranslation()
   const ref = useScrollReveal()
 
   return (
     <div ref={ref} className={`audience-card reveal reveal-delay-${delay}`}>
-      <span className="audience-emoji">{emoji}</span>
-      {/* Підтягуємо заголовок та опис за id (s1, s2, s3) */}
+      {/* Кругла іконка замість емодзі */}
+      <div className="audience-icon-wrap">
+        <Icon size={40} weight="duotone" />
+      </div>
       <h3>{t(`audience.${id}_title`)}</h3>
       <p>{t(`audience.${id}_desc`)}</p>
     </div>
@@ -32,19 +34,12 @@ export default function Audience() {
         <div ref={headerRef} className="text-center reveal">
           <div className="section-tag">{t('audience.tag')}</div>
           <h2>{t('audience.title')}</h2>
-          <p className="section-desc">
-            {t('audience.desc')}
-          </p>
+          <p className="section-desc">{t('audience.desc')}</p>
         </div>
 
         <div className="audience-grid">
           {AUDIENCE_ITEMS.map((item, i) => (
-            <AudienceCard 
-              key={item.id} 
-              id={item.id} 
-              emoji={item.emoji} 
-              delay={i + 1} 
-            />
+            <AudienceCard key={item.id} {...item} delay={i + 1} />
           ))}
         </div>
       </div>
