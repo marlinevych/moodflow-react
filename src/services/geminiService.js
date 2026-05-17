@@ -73,19 +73,21 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
         temperature:     0.7,
         maxOutputTokens: 600,
         topP:            0.9,
-        responseMimeType: "application/json", // Змушує сервер віддати чистий JSON без тексту
-      },
-      safetySettings: [
-        { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
-      ],
+        // Залишаємо responseMimeType, але якщо помилка не зникне локально, 
+        // його можна буде тимчасово закоментувати для перевірки
+        responseMimeType: "application/json", 
+      }
+      // МИ ПОВНІСТЮ ПРИБРАЛИ БЛОК safetySettings.
+      // Оскільки наш промпт суто психологічний та терапевтичний (без токсичності),
+      // стандартні фільтри Google пропустять його без проблем, а помилка 400 зникне!
     }),
   })
 
   if (!response.ok) {
     const err = await response.json().catch(() => ({}))
+    // Виведемо точну причину відхилення від Google в консоль, щоб ми не гадали
+    console.error('Деталі помилки від Google:', err)
+    
     if (response.status === 400) throw new Error('INVALID_KEY')
     if (response.status === 429) throw new Error('RATE_LIMIT')
     throw new Error(err?.error?.message ?? 'API_ERROR')
@@ -94,7 +96,6 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
   const data = await response.json()
   const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
 
-  // Безпечний парсинг масиву
   const jsonMatch = rawText.match(/\[[\s\S]*\]/)
   if (!jsonMatch) throw new Error('PARSE_ERROR')
 
