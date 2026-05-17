@@ -22,16 +22,26 @@ function buildPrompt(scores, totalIndex, mood, language = 'uk') {
     .map(([k, v]) => `${labels[k]}: ${v}%`)
     .join(', ')
 
-  return `You are a psychological counselor. Analyze this PANAS emotional profile:
-- Overall Mood State: ${moods[mood]}
+  return `You are a psychological counselor. Analyze this PANAS profile:
+- Mood State: ${moods[mood]}
 - Wellbeing Index: ${totalIndex}/10
-- Detailed Scales: ${scalesText}
+- Scales: ${scalesText}
 
-Provide exactly 3-4 highly personalized, unique recommendations based on the highest or lowest score scales to help the user.
+Provide exactly 3 personalized, unique, dynamic recommendations tailored to this profile.
 The output language must be strictly ${lang === 'uk' ? 'Ukrainian' : 'English'}.
-Each recommendation text must be very concise (maximum 10-12 words) to prevent token exhaustion.
 
-For each point, pick the most appropriate icon type: "light" (for joy/positivity), "brain" (for logic/focus), "star" (for energy/activity), or "shield" (for stress relief/safety).`;
+CRITICAL FORMATED OUTPUT RULES:
+You must output exactly 3 lines. No markdown, no introduction, no bullet points.
+Each line must strictly follow this pattern:
+ICON_TYPE|SHORT_TITLE|RECOMMENDATION_TEXT
+
+- ICON_TYPE must be only one of these words: light, brain, star, shield.
+- SHORT_TITLE must be 2-4 words.
+- RECOMMENDATION_TEXT must be exactly 1 clear sentence (max 12 words).
+
+Example of output:
+shield|Зниження навантаження|Постарайтеся обмежити потік новин та зробити коротку паузу для відпочинку.
+star|Активація енергії|Додайте легкої фізичної активності або увімкніть динамічну музику.`;
 }
 
 export async function getRecommendations({ apiKey, scores, totalIndex, mood, language = 'uk' }) {
@@ -46,23 +56,10 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature:     0.7, 
-          maxOutputTokens: 1000, 
+          temperature:     0.8, // Жива творчість ШІ
+          maxOutputTokens: 600,
           topP:            0.95,
-          responseMimeType: "application/json",
-          // Змінено на зміну snake_case для стабільної версії v1 API
-          response_schema: {
-            type: "ARRAY",
-            items: {
-              type: "OBJECT",
-              properties: {
-                type: { type: "STRING", enum: ["light", "brain", "star", "shield"] },
-                title: { type: "STRING" },
-                text: { type: "STRING" }
-              },
-              required: ["type", "title", "text"]
-            }
-          }
+          // МИ ПОВНІСТЮ ПРИБРАЛИ ВСІ ВЕРЕДЛИВІ ПАРАМЕТРИ JSON-РЕЖИМІВ
         },
       }),
     });
@@ -78,12 +75,25 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
     const data = await response.json()
     const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
 
-    // Тепер тут залізно буде чистий, динамічний JSON
-    const recommendations = JSON.parse(rawText)
+    // Парсимо текстові рядки розділені символом '|'
+    const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.includes('|'))
 
-    if (!Array.isArray(recommendations) || recommendations.length === 0) {
-      throw new Error('EMPTY_RESPONSE')
+    if (lines.length === 0) {
+      console.error("Помилка структури тексту від ШІ:", rawText)
+      throw new Error('PARSE_ERROR')
     }
+
+    // Перетворюємо унікальний текст ШІ на об'єкти для React
+    const recommendations = lines.map(line => {
+      const [type, title, text] = line.split('|')
+      const cleanType = type?.trim().toLowerCase();
+      
+      return {
+        type: ['light', 'brain', 'star', 'shield'].includes(cleanType) ? cleanType : 'light',
+        title: title?.trim() || (language === 'uk' ? 'Порада' : 'Advice'),
+        text: text?.trim() || line
+      }
+    })
 
     return recommendations.slice(0, 4)
 
