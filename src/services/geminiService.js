@@ -59,8 +59,8 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature:     0.1, // Максимальна точність
-          maxOutputTokens: 200, // JSON тепер крихітний, 200 токенів вистачить з головою!
+          temperature:     0.1, 
+          maxOutputTokens: 300, 
           topP:            0.1,
         },
       }),
@@ -75,17 +75,55 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
     const data = await response.json()
     let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
 
+    // Очищаємо від залишкових тегів маркдауну
     rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim()
 
-    const jsonMatch = rawText.match(/\[[\s\S]*\]/)
-    if (!jsonMatch) throw new Error('PARSE_ERROR')
+    let rawTypes = [];
 
-    const rawTypes = JSON.parse(jsonMatch[0])
-    if (!Array.isArray(rawTypes) || rawTypes.length === 0) throw new Error('EMPTY_RESPONSE')
+    // СТРАТЕГІЯ ПАРСИНГУ №1: Шукаємо стандартний масив [ ... ]
+    const arrayMatch = rawText.match(/\[[\s\S]*\]/)
+    if (arrayMatch) {
+      try {
+        const parsed = JSON.parse(arrayMatch[0])
+        if (Array.isArray(parsed)) rawTypes = parsed;
+      } catch (e) {
+        console.warn("Збій парсингу масиву, йдемо далі")
+      }
+    }
+
+    // СТРАТЕГІЯ ПАРСИНГУ №2: Якщо масиву немає, шукаємо об'єкт { ... }
+    if (rawTypes.length === 0) {
+      const objectMatch = rawText.match(/\{[\s\S]*\}/)
+      if (objectMatch) {
+        try {
+          const parsedObj = JSON.parse(objectMatch[0])
+          // Якщо всередині об'єкта є масив (наприклад, { data: [...] } або { recommendations: [...] })
+          const internalArray = Object.values(parsedObj).find(val => Array.isArray(val))
+          if (internalArray) rawTypes = internalArray;
+        } catch (e) {
+          console.warn("Збій парсингу об'єкта")
+        }
+      }
+    }
+
+    // СТРАТЕГІЯ ПАРСИНГУ №3: Найсміливіший фолбек (шукаємо ключові слова прямо в тексті)
+    if (rawTypes.length === 0) {
+      const keywords = ['light', 'brain', 'star', 'shield'];
+      keywords.forEach(word => {
+        if (rawText.toLowerCase().includes(word)) {
+          rawTypes.push({ type: word });
+        }
+      });
+    }
+
+    // Якщо взагалі нічого не знайшли — ставимо базовий безпечний набір карток
+    if (rawTypes.length === 0) {
+      rawTypes = [{ type: 'light' }, { type: 'brain' }, { type: 'shield' }];
+    }
 
     // Мапимо отримані типи на наш залізобетонний словник перекладів
     const recommendations = rawTypes.map(item => {
-      const type = item.type || 'light';
+      const type = item?.type || 'light';
       return {
         type: type,
         title: LOCALIZATION[currentLang][`${type}_title`] || LOCALIZATION[currentLang].light_title,
