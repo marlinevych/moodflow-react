@@ -2,7 +2,7 @@ export const ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY ?? '';
 
 // Оновлюємо на стабільну модель 2.0 або 2.5 Flash під твою Pro-підписку
 const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
 function buildPrompt(scores, totalIndex, mood, language = 'uk') {
   const moodLabels = {
