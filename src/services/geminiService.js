@@ -74,10 +74,7 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
         maxOutputTokens: 600,
         topP:            0.9,
       }
-      // МИ ПОВНІСТЮ ПРИБРАЛИ БЛОК safetySettings.
-      // Оскільки наш промпт суто психологічний та терапевтичний (без токсичності),
-      // стандартні фільтри Google пропустять його без проблем, а помилка 400 зникне!
-    }),
+  }),
   })
 
   if (!response.ok) {
