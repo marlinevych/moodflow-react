@@ -28,16 +28,16 @@ Analyze this PANAS test profile:
 - Wellbeing index: ${totalIndex}/10
 - Scales: ${scalesText}
 
-Provide exactly 3-4 brief personalized recommendations in ${lang === 'uk' ? 'Ukrainian' : 'English'}.
+Provide exactly 3 brief personalized recommendations in ${lang === 'uk' ? 'Ukrainian' : 'English'}.
+Each recommendation text must be very short (strictly maximum 1 sentence).
 
 CRITICAL: Your response must be a valid JSON array of objects. Do not use markdown blocks, text formatting, or conversational notes. 
 
-Each object must have a "type" string that strictly matches one of these categories based on the advice content: "light", "brain", "star", or "shield".
+Each object must have a "type" string that strictly matches one of these categories: "light", "brain", "star", or "shield".
 
 Expected JSON format:
 [
-  { "type": "light", "title": "Short Title", "text": "Recommendation text." },
-  { "type": "brain", "title": "Short Title", "text": "Recommendation text." }
+  { "type": "light", "title": "Short Title", "text": "Short 1-sentence advice." }
 ]`;
 }
 
@@ -53,10 +53,9 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature:     0.2, // Низька температура гарантує точне дотримання формату
-          maxOutputTokens: 700,
+          temperature:     0.3, 
+          maxOutputTokens: 1500, // ЗБІЛЬШУЄМО ЛІМІТ, щоб текст не обривався
           topP:            0.9,
-          // МИ ПОВНІСТЮ ПРИБРАЛИ РЯДОК responseMimeType ЩОБ УНИКНУТИ ПОМИЛКИ 400
         },
       }),
     });
@@ -72,10 +71,8 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
     const data = await response.json()
     let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
 
-    // Очищаємо текст від можливих маркдаун-обгорток ```json ... ```
     rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim()
 
-    // Надійний пошук масиву [ ... ] всередині будь-якого тексту
     const jsonMatch = rawText.match(/\[[\s\S]*\]/)
     if (!jsonMatch) {
       console.error("Отриманий текст не містить JSON масиву:", rawText)
