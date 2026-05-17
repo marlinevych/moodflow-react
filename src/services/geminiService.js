@@ -46,37 +46,58 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
 
   const prompt = buildPrompt(scores, totalIndex, mood, language)
 
-  const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature:     0.2, // Мінімальна температура, щоб модель строго тримала формат JSON
-        maxOutputTokens: 700,
-        topP:            0.9,
-        responseMimeType: "application/json" // Повертаємо строгий JSON режим
-      },
-    }),
-  })
+  try {
+    const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature:     0.2, // Низька температура гарантує точне дотримання формату
+          maxOutputTokens: 700,
+          topP:            0.9,
+          // МИ ПОВНІСТЮ ПРИБРАЛИ РЯДОК responseMimeType ЩОБ УНИКНУТИ ПОМИЛКИ 400
+        },
+      }),
+    });
 
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({}))
-    if (response.status === 400) throw new Error('INVALID_KEY')
-    if (response.status === 429) throw new Error('RATE_LIMIT')
-    throw new Error('API_ERROR')
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}))
+      console.error('Деталі помилки ВІД СЕРВЕРА Google:', err)
+      if (response.status === 400) throw new Error('INVALID_KEY')
+      if (response.status === 429) throw new Error('RATE_LIMIT')
+      throw new Error('API_ERROR')
+    }
+
+    const data = await response.json()
+    let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+
+    // Очищаємо текст від можливих маркдаун-обгорток ```json ... ```
+    rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim()
+
+    // Надійний пошук масиву [ ... ] всередині будь-якого тексту
+    const jsonMatch = rawText.match(/\[[\s\S]*\]/)
+    if (!jsonMatch) {
+      console.error("Отриманий текст не містить JSON масиву:", rawText)
+      throw new Error('PARSE_ERROR')
+    }
+
+    let recommendations;
+    try {
+      recommendations = JSON.parse(jsonMatch[0])
+    } catch (parseExc) {
+      console.error("Помилка всередині JSON.parse:", parseExc, "Текст:", jsonMatch[0])
+      throw new Error('PARSE_ERROR')
+    }
+
+    if (!Array.isArray(recommendations) || recommendations.length === 0) {
+      throw new Error('EMPTY_RESPONSE')
+    }
+
+    return recommendations.slice(0, 4)
+
+  } catch (globalError) {
+    console.error('КРИТИЧНА ПОМИЛКА ДЕ СТАВСЯ ЗБІЙ:', globalError)
+    throw globalError
   }
-
-  const data = await response.json()
-  const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
-
-  const jsonMatch = rawText.match(/\[[\s\S]*\]/)
-  if (!jsonMatch) throw new Error('PARSE_ERROR')
-
-  const recommendations = JSON.parse(jsonMatch[0])
-  if (!Array.isArray(recommendations) || recommendations.length === 0) {
-    throw new Error('EMPTY_RESPONSE')
-  }
-
-  return recommendations.slice(0, 4)
 }
