@@ -89,14 +89,28 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
   const data = await response.json()
   const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
 
+  rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim()
+
+  // 2. Шукаємо масив [ ... ] за допомогою регулярного виразу
   const jsonMatch = rawText.match(/\[[\s\S]*\]/)
-  if (!jsonMatch) throw new Error('PARSE_ERROR')
+  if (!jsonMatch) {
+    console.error("Отриманий текст не містить JSON масиву:", rawText)
+    throw new Error('PARSE_ERROR')
+  }
 
-  const recommendations = JSON.parse(jsonMatch[0])
+  // 3. Безпечно парсимо очищений JSON
+  let recommendations;
+  try {
+    recommendations = JSON.parse(jsonMatch[0])
+  } catch (parseExc) {
+    console.error("Помилка всередині JSON.parse:", parseExc, "Текст:", jsonMatch[0])
+    throw new Error('PARSE_ERROR')
+  }
 
+  // Валідуємо структуру
   if (!Array.isArray(recommendations) || recommendations.length === 0) {
     throw new Error('EMPTY_RESPONSE')
   }
 
-  return recommendations.slice(0, 4)
+  return recommendations.slice(0, 4) // максимум 4 рекомендації
 }
