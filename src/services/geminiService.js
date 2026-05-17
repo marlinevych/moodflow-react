@@ -1,33 +1,8 @@
-/**
- * geminiService.js
- *
- * Сервіс для отримання персоналізованих рекомендацій
- * на основі результатів тесту PANAS через Google Gemini API.
- *
- * Модель: gemini-1.5-flash (безкоштовний tier)
- *   — 15 запитів/хвилину
- *   — 1 500 000 токенів/день
- *   — Повністю безкоштовно без кредитної картки
- *
- * Отримати API ключ: https://aistudio.google.com/app/apikey
- *
- * Науковий контекст (для курсової):
- *   Використання LLM для інтерпретації психометричних даних
- *   є напрямом досліджень у галузі affective computing та
- *   human-computer interaction (HCI).
- */
 export const ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY ?? '';
-const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
 
-/**
- * Будує промпт для Gemini на основі результатів PANAS-тесту.
- *
- * @param {object} scores    — { joy, calm, energy, focus, stress } у %
- * @param {number} totalIndex — загальний індекс 0–10
- * @param {string} mood      — 'happy' | 'calm' | 'neutral' | 'stressed'
- * @param {string} language  — 'uk' | 'en'
- */
+const GEMINI_API_URL =
+  'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
+
 function buildPrompt(scores, totalIndex, mood, language = 'uk') {
   const moodLabels = {
     uk: { happy: 'Радісний', calm: 'Спокійний', neutral: 'Нейтральний', stressed: 'Стресовий' },
@@ -49,54 +24,41 @@ function buildPrompt(scores, totalIndex, mood, language = 'uk') {
 
   if (lang === 'uk') {
     return `Ти — психолог-консультант, що спеціалізується на управлінні емоційним станом.
-
-Користувач пройшов адаптований тест PANAS (Positive and Negative Affect Schedule, Watson et al., 1988).
+Користувач пройшов адаптований тест PANAS (Positive and Negative Affect Schedule).
 
 Результати тесту:
 - Загальний афективний стан: ${moods[mood]}
 - Загальний індекс благополуччя: ${totalIndex}/10
 - Детальні шкали: ${scalesText}
 
-Надай короткі персоналізовані рекомендації (3-4 пункти) що допоможуть покращити або підтримати поточний емоційний стан. Враховуй конкретні значення шкал.
+Надай короткі персоналізовані рекомендації (3-4 пункти) що допоможуть покращити або підтримати поточний емоційний стан.
 
-Формат відповіді — JSON масив об'єктів:
+Формат відповіді — JSON масив об'єктів (строго дотримуйся синтаксису ком):
 [
-  { "icon": "title": "Коротка назва (3-4 слова)", "text": "Рекомендація (1-2 речення)" }
+  { "icon": "emoji", "title": "Коротка назва (3-4 слова)", "text": "Рекомендація (1-2 речення)" }
 ]
 
-Тільки JSON, без пояснень.`
+Тільки чистий JSON, без маркдауну та без твоїх пояснень.`
   }
 
   return `You are a psychological counselor specializing in emotional state management.
-
-The user completed an adapted PANAS test (Positive and Negative Affect Schedule, Watson et al., 1988).
+The user completed an adapted PANAS test.
 
 Test results:
 - Overall affective state: ${moods[mood]}
 - Wellbeing index: ${totalIndex}/10
 - Scale details: ${scalesText}
 
-Provide brief personalized recommendations (3-4 points) to improve or maintain the current emotional state. Consider the specific scale values.
+Provide brief personalized recommendations (3-4 points) to improve or maintain the current emotional state.
 
 Response format — JSON array of objects:
 [
-  { "icon": "title": "Short title (3-4 words)", "text": "Recommendation (1-2 sentences)" }
+  { "icon": "emoji", "title": "Short title (3-4 words)", "text": "Recommendation (1-2 sentences)" }
 ]
 
-JSON only, no explanations. Icons should match the recommendation theme.`
+JSON only, no explanations. Emojis should match the recommendation theme.`
 }
 
-/**
- * getRecommendations()
- * Основна функція — відправляє запит до Gemini і повертає рекомендації.
- *
- * @param {string} apiKey
- * @param {object} scores     — { joy, calm, energy, focus, stress }
- * @param {number} totalIndex
- * @param {string} mood
- * @param {string} language   — 'uk' | 'en'
- * @returns {Promise<Array>}  — масив { icon, title, text }
- */
 export async function getRecommendations({ apiKey, scores, totalIndex, mood, language = 'uk' }) {
   if (!apiKey) throw new Error('NO_API_KEY')
 
@@ -108,10 +70,10 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
-        temperature:     0.7,   // баланс між творчістю і точністю
-        maxOutputTokens: 600,   // достатньо для 4 рекомендацій
+        temperature:     0.7,
+        maxOutputTokens: 600,
         topP:            0.9,
-        responseMimeType: "application/json",
+        responseMimeType: "application/json", // Змушує сервер віддати чистий JSON без тексту
       },
       safetySettings: [
         { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_NONE' },
@@ -130,20 +92,17 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
   }
 
   const data = await response.json()
-
-  // Витягуємо текст відповіді
   const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
 
-  // Парсимо JSON з відповіді (Gemini іноді обгортає в ```json ... ```)
+  // Безпечний парсинг масиву
   const jsonMatch = rawText.match(/\[[\s\S]*\]/)
   if (!jsonMatch) throw new Error('PARSE_ERROR')
 
   const recommendations = JSON.parse(jsonMatch[0])
 
-  // Валідуємо структуру
   if (!Array.isArray(recommendations) || recommendations.length === 0) {
     throw new Error('EMPTY_RESPONSE')
   }
 
-  return recommendations.slice(0, 4) // максимум 4 рекомендації
+  return recommendations.slice(0, 4)
 }

@@ -33,7 +33,7 @@ export default defineConfig({
       },
       workbox: {
         // КРИТИЧНО: Віддавати index.html для будь-якого шляху в офлайні
-        navigateFallback: '/index.html',
+        navigateFallback: '/moodflow-react/index.html',
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
         runtimeCaching: [
           {
