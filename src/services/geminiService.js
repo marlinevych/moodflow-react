@@ -73,9 +73,6 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
         temperature:     0.7,
         maxOutputTokens: 600,
         topP:            0.9,
-        // Залишаємо responseMimeType, але якщо помилка не зникне локально, 
-        // його можна буде тимчасово закоментувати для перевірки
-        responseMimeType: "application/json", 
       }
       // МИ ПОВНІСТЮ ПРИБРАЛИ БЛОК safetySettings.
       // Оскільки наш промпт суто психологічний та терапевтичний (без токсичності),
