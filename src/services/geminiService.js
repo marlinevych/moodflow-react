@@ -3,48 +3,54 @@ export const ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY ?? '';
 const GEMINI_API_URL =
   'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent';
 
-function buildPrompt(scores, totalIndex, mood, language = 'uk') {
-  const moodLabels = {
-    uk: { happy: 'Радісний', calm: 'Спокійний', neutral: 'Нейтральний', stressed: 'Стресовий' },
-    en: { happy: 'Joyful', calm: 'Calm', neutral: 'Neutral', stressed: 'Stressed' },
+// ЛОКАЛІЗАЦІЯ: Наш власний словник перекладів, який ніколи не обірветься
+const LOCALIZATION = {
+  uk: {
+    light_title: "Радість у дрібницях",
+    light_text: "Додайте у свій день маленькі приємні заняття, які викликають посмішку та покращують настрій.",
+    brain_title: "Розумове розвантаження",
+    brain_text: "Зробіть коротку паузу: зафіксуйте поточні думки на папері або переключіть увагу на дихання.",
+    star_title: "Активація енергії",
+    star_text: "Додайте легкої фізичної активності або увімкніть улюблену динамічну музику для тонусу.",
+    shield_title: "Управління стресом",
+    shield_text: "Захистіть свій простір від зайвого шуму, обмежте новини та фокусуйтеся на тому, що можете контролювати."
+  },
+  en: {
+    light_title: "Joy in Small Things",
+    light_text: "Consciously add small pleasant activities to your day that bring a smile and boost your mood.",
+    brain_title: "Mental Offloading",
+    brain_text: "Take a short break: clear your mind by writing down thoughts or focusing on your breathing.",
+    star_title: "Energy Activation",
+    star_text: "Engage in light physical activity or play your favorite dynamic music to increase your tone.",
+    shield_title: "Stress Management",
+    shield_text: "Protect your space from noise, limit news intake, and focus on what you can control."
   }
+};
 
-  const scaleLabels = {
-    uk: { joy: 'Радість', calm: 'Спокій', energy: 'Енергія', focus: 'Фокус', stress: 'Стрес' },
-    en: { joy: 'Joy', calm: 'Calm', energy: 'Energy', focus: 'Focus', stress: 'Stress' },
-  }
+function buildPrompt(scores, totalIndex, mood) {
+  const scalesText = Object.entries(scores).map(([k, v]) => `${k}: ${v}%`).join(', ');
 
-  const lang   = language === 'uk' ? 'uk' : 'en'
-  const labels = scaleLabels[lang]
-  const moods  = moodLabels[lang]
+  return `You are a psychological data analyzer. Analyze this psychological PANAS profile:
+- Overall State: ${mood}
+- Wellbeing Index: ${totalIndex}/10
+- Detailed Scales: ${scalesText}
 
-  const scalesText = Object.entries(scores)
-    .map(([k, v]) => `${labels[k]}: ${v}%`)
-    .join(', ')
+Based on the weakest or strongest scales, choose exactly 3-4 distinct categories from this list: "light", "brain", "star", "shield".
 
-  return `You are a psychological counselor specializing in emotional state management.
-Analyze this PANAS test profile:
-- Mood: ${moods[mood]}
-- Wellbeing index: ${totalIndex}/10
-- Scales: ${scalesText}
-
-Provide exactly 3 brief personalized recommendations in ${lang === 'uk' ? 'Ukrainian' : 'English'}.
-Each recommendation text must be very short (strictly maximum 1 sentence).
-
-CRITICAL: Your response must be a valid JSON array of objects. Do not use markdown blocks, text formatting, or conversational notes. 
-
-Each object must have a "type" string that strictly matches one of these categories: "light", "brain", "star", or "shield".
-
-Expected JSON format:
+CRITICAL: Your response must be strictly a raw JSON array of objects, no markdown blocks.
+Expected format:
 [
-  { "type": "light", "title": "Short Title", "text": "Short 1-sentence advice." }
+  { "type": "light" },
+  { "type": "shield" },
+  { "type": "brain" }
 ]`;
 }
 
 export async function getRecommendations({ apiKey, scores, totalIndex, mood, language = 'uk' }) {
   if (!apiKey) throw new Error('NO_API_KEY')
 
-  const prompt = buildPrompt(scores, totalIndex, mood, language)
+  const prompt = buildPrompt(scores, totalIndex, mood)
+  const currentLang = language === 'uk' ? 'uk' : 'en';
 
   try {
     const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
@@ -53,16 +59,14 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature:     0.3, 
-          maxOutputTokens: 1500, // ЗБІЛЬШУЄМО ЛІМІТ, щоб текст не обривався
-          topP:            0.9,
+          temperature:     0.1, // Максимальна точність
+          maxOutputTokens: 200, // JSON тепер крихітний, 200 токенів вистачить з головою!
+          topP:            0.1,
         },
       }),
     });
 
     if (!response.ok) {
-      const err = await response.json().catch(() => ({}))
-      console.error('Деталі помилки ВІД СЕРВЕРА Google:', err)
       if (response.status === 400) throw new Error('INVALID_KEY')
       if (response.status === 429) throw new Error('RATE_LIMIT')
       throw new Error('API_ERROR')
@@ -74,22 +78,20 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
     rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim()
 
     const jsonMatch = rawText.match(/\[[\s\S]*\]/)
-    if (!jsonMatch) {
-      console.error("Отриманий текст не містить JSON масиву:", rawText)
-      throw new Error('PARSE_ERROR')
-    }
+    if (!jsonMatch) throw new Error('PARSE_ERROR')
 
-    let recommendations;
-    try {
-      recommendations = JSON.parse(jsonMatch[0])
-    } catch (parseExc) {
-      console.error("Помилка всередині JSON.parse:", parseExc, "Текст:", jsonMatch[0])
-      throw new Error('PARSE_ERROR')
-    }
+    const rawTypes = JSON.parse(jsonMatch[0])
+    if (!Array.isArray(rawTypes) || rawTypes.length === 0) throw new Error('EMPTY_RESPONSE')
 
-    if (!Array.isArray(recommendations) || recommendations.length === 0) {
-      throw new Error('EMPTY_RESPONSE')
-    }
+    // Мапимо отримані типи на наш залізобетонний словник перекладів
+    const recommendations = rawTypes.map(item => {
+      const type = item.type || 'light';
+      return {
+        type: type,
+        title: LOCALIZATION[currentLang][`${type}_title`] || LOCALIZATION[currentLang].light_title,
+        text: LOCALIZATION[currentLang][`${type}_text`] || LOCALIZATION[currentLang].light_text
+      };
+    });
 
     return recommendations.slice(0, 4)
 
