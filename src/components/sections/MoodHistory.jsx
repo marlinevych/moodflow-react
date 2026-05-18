@@ -6,6 +6,12 @@ import {
   PolarRadiusAxis, ResponsiveContainer, Tooltip,
   LineChart, Line, XAxis, YAxis, CartesianGrid, Legend,
 } from 'recharts'
+
+import {
+  Smiley, Cloud, Lightning, Sun,
+  ClipboardText, ChartLineUp, Sparkle
+} from '@phosphor-icons/react'
+
 import { useMoodStore } from '../../store/useMoodStore'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
@@ -18,10 +24,27 @@ const SCALE_META = [
   { key: 'stress', labelKey: 'scales.stress', color: '#dc2626' },
 ]
 
-const MOOD_EMOJI = { happy: '🌟', calm: '🌿', neutral: '✨', stressed: '🔥' }
+/* ── mood → icon map ─────────────────────────────────────── */
+const MOOD_ICONS = {
+  happy: {
+    Icon: Smiley,
+  },
+  calm: {
+    Icon: Cloud,
+  },
+  stressed: {
+    Icon: Lightning,
+  },
+  neutral: {
+    Icon: Sparkle,
+  },
+}
 
 function formatDate(iso, locale = 'uk-UA') {
-  return new Date(iso).toLocaleDateString(locale, { day: 'numeric', month: 'short' })
+  return new Date(iso).toLocaleDateString(locale, {
+    day: 'numeric',
+    month: 'short'
+  })
 }
 
 /* ── Кастомний тултіп ────────────────────────────────────── */
@@ -47,6 +70,9 @@ function CustomTooltip({ active, payload }) {
 /* ── Картка одного запису ────────────────────────────────── */
 function HistoryCard({ entry, index, onDelete }) {
   const { t, i18n } = useTranslation()
+
+  const MoodIcon = MOOD_ICONS[entry.mood]?.Icon ?? Sparkle
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -54,36 +80,63 @@ function HistoryCard({ entry, index, onDelete }) {
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.25 }}
       style={{
-        background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)',
-        borderRadius: 'var(--border-radius)', padding: '16px 20px',
-        display: 'flex', alignItems: 'center', gap: 14,
+        background: 'var(--bg-card)',
+        border: '1px solid var(--bg-card-border)',
+        borderRadius: 'var(--border-radius)',
+        padding: '16px 20px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 14,
       }}
     >
-      <span style={{ fontSize: 28, flexShrink: 0 }}>{MOOD_EMOJI[entry.mood] ?? '✨'}</span>
+      {/* mood icon */}
+      <MoodIcon
+        size={28}
+        weight="duotone"
+        color="var(--accent)"
+        style={{ flexShrink: 0 }}
+      />
 
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--text-primary)', fontSize: 14 }}>
+        <div style={{
+          fontFamily: 'var(--font-display)',
+          fontWeight: 700,
+          color: 'var(--text-primary)',
+          fontSize: 14
+        }}>
           {t(`mood.${entry.mood}`)}
         </div>
+
         <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
-          {formatDate(entry.date, i18n.language === 'uk' ? 'uk-UA' : 'en-US')} · {t('quiz.total_index')}:{' '}
-          <strong style={{ color: 'var(--accent)' }}>{entry.totalIndex}</strong>
+          {formatDate(entry.date, i18n.language === 'uk' ? 'uk-UA' : 'en-US')} ·
+          {' '}
+          <strong style={{ color: 'var(--accent)' }}>
+            {entry.totalIndex}
+          </strong>
         </div>
       </div>
 
-      {/* Міні-стовпчики шкал */}
-      <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', flexShrink: 0 }}>
-        {SCALE_META.map(({ key, labelKey, color }) => (
+      {/* mini bars (без змін логіки) */}
+      <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end' }}>
+        {SCALE_META.map(({ key, color }) => (
           <div
             key={key}
-            title={`${t(labelKey)}: ${entry.scores?.[key] ?? 0}%`}
             style={{
-              width: 5, height: 32,
-              background: 'var(--bg-secondary)', borderRadius: 3,
-              overflow: 'hidden', display: 'flex', flexDirection: 'column-reverse',
+              width: 5,
+              height: 32,
+              background: 'var(--bg-secondary)',
+              borderRadius: 3,
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column-reverse',
             }}
           >
-            <div style={{ height: `${entry.scores?.[key] ?? 0}%`, background: color, borderRadius: 3 }} />
+            <div
+              style={{
+                height: `${entry.scores?.[key] ?? 0}%`,
+                background: color,
+              }}
+            />
           </div>
         ))}
       </div>
@@ -91,14 +144,20 @@ function HistoryCard({ entry, index, onDelete }) {
       <button
         onClick={() => onDelete(index)}
         style={{
-          background: 'var(--bg-secondary)', border: '1px solid var(--bg-card-border)',
-          borderRadius: 8, width: 28, height: 28, cursor: 'pointer',
-          color: 'var(--text-muted)', fontSize: 12, display: 'flex',
-          alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+          background: 'var(--bg-secondary)',
+          border: '1px solid var(--bg-card-border)',
+          borderRadius: 8,
+          width: 28,
+          height: 28,
+          cursor: 'pointer',
+          color: 'var(--text-muted)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = '#fee2e2'; e.currentTarget.style.color = '#dc2626' }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'var(--bg-secondary)'; e.currentTarget.style.color = 'var(--text-muted)' }}
-      >✕</button>
+      >
+        ✕
+      </button>
     </motion.div>
   )
 }
@@ -181,16 +240,21 @@ export default function MoodHistory() {
               ── */}
               <div className="history-stats-grid">
                 {[
-                  { label: t('history.stats.tests_count'), value: history.length,       emoji: '📋' },
-                  { label: t('history.stats.avg_index'),   value: avgIndex ?? '—',      emoji: '📊' },
-                  { label: t('history.stats.last_state'),  value: t(`mood.${history.at(-1)?.mood}`) ?? '—', emoji: MOOD_EMOJI[history.at(-1)?.mood] ?? '✨' },
-                ].map(({ label, value, emoji }) => (
+                  { label: t('history.stats.tests_count'), value: history.length, Icon: ClipboardText },
+                  { label: t('history.stats.avg_index'), value: avgIndex ?? '—', Icon: ChartLineUp },
+                  { label: t('history.stats.last_state'), value: t(`mood.${history.at(-1)?.mood}`) ?? '—', Icon: Sparkle },
+                ].map(({ label, value, Icon }) => (
                   <motion.div
                     key={label}
                     whileHover={{ y: -3 }}
                     className="history-stat-card"
                   >
-                    <div style={{ fontSize: 26, marginBottom: 6 }}>{emoji}</div>
+                    <Icon
+                      size={26}
+                      weight="duotone"
+                      color="var(--accent)"
+                      style={{ marginBottom: 6 }}
+                    />
                     <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: 'var(--accent)', lineHeight: 1.2 }}>
                       {value}
                     </div>

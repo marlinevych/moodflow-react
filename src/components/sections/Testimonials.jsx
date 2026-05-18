@@ -1,25 +1,25 @@
 import { useTranslation } from 'react-i18next'
-import { User, UserCircle, UserSquare } from '@phosphor-icons/react'
+import { UserCircle } from '@phosphor-icons/react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
 const TESTIMONIAL_KEYS = [
-  { id: 'olena', Icon: UserCircle },
-  { id: 'max',   Icon: User       },
-  { id: 'anna',  Icon: UserSquare },
+  { id: 'olena', gradient: 'linear-gradient(135deg, #6c4ff6, #a78bfa)' },
+  { id: 'max',   gradient: 'linear-gradient(135deg, #059669, #34d399)' },
+  { id: 'anna',  gradient: 'linear-gradient(135deg, #f59e0b, #fbbf24)' },
 ]
 
-function TestimonialCard({ id, Icon, delay }) {
+function TestimonialCard({ id, gradient, delay }) {
   const { t } = useTranslation()
-  const ref = useScrollReveal()
+  const ref   = useScrollReveal()
 
   return (
     <div ref={ref} className={`testimonial-card reveal reveal-delay-${delay}`}>
       <div className="stars">★★★★★</div>
       <p>"{t(`testimonials.items.${id}.text`)}"</p>
       <div className="testimonial-author">
-        {/* Phosphor іконка замість емодзі-аватара */}
-        <div className="author-avatar">
-          <Icon size={26} weight="duotone" color="white" />
+        {/* Одна іконка UserCircle — різний градієнт фону */}
+        <div className="author-avatar" style={{ background: gradient }}>
+          <UserCircle size={28} weight="duotone" color="white" />
         </div>
         <div className="author-info">
           <div className="name">{t(`testimonials.items.${id}.name`)}</div>
@@ -31,7 +31,7 @@ function TestimonialCard({ id, Icon, delay }) {
 }
 
 export default function Testimonials() {
-  const { t } = useTranslation()
+  const { t }     = useTranslation()
   const headerRef = useScrollReveal()
 
   return (

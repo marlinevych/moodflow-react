@@ -20,7 +20,7 @@ export default function AIRecommendations({ result, language = 'uk' }) {
       loading:     'Gemini аналізує твій афективний профіль…',
       key_title:   'Введи Gemini API ключ',
       key_desc:    'Безкоштовно на',
-      key_hint:    '→ Натисни «Create API key»',
+      key_hint:    'Натисни «Create API key»',
       key_ph:      'AIzaSy...',
       key_btn:     'Отримати рекомендації',
       key_privacy: 'Ключ зберігається тільки у твоєму браузері',
@@ -44,7 +44,7 @@ export default function AIRecommendations({ result, language = 'uk' }) {
       loading:     'Gemini is analyzing your affective profile…',
       key_title:   'Enter Gemini API Key',
       key_desc:    'Free at',
-      key_hint:    '→ Click «Create API key»',
+      key_hint:    'Click «Create API key»',
       key_ph:      'AIzaSy...',
       key_btn:     'Get Recommendations',
       key_privacy: 'Key stored only in your browser',
@@ -152,7 +152,6 @@ export default function AIRecommendations({ result, language = 'uk' }) {
               onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
               onMouseLeave={e => e.currentTarget.style.transform = 'none'}
             >
-              <Robot size={16} weight="fill" />
               {ui.btn}
             </button>
             <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 10 }}>{ui.powered}</p>

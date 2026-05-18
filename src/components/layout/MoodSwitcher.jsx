@@ -1,19 +1,17 @@
 import { useTranslation } from 'react-i18next'
-import { SmileyWink, Cloud, FireSimple, CircleDashed } from '@phosphor-icons/react'
+import { SmileyWink, CloudSun, Flame, YinYang } from '@phosphor-icons/react'
 import { useMoodStore } from '../../store/useMoodStore'
 
+const MOOD_CONFIG = {
+  happy:    { Icon: SmileyWink, activeColor: '#f59e0b' },
+  calm:     { Icon: CloudSun,   activeColor: '#059669' },
+  stressed: { Icon: Flame,      activeColor: '#dc2626' },
+  neutral:  { Icon: YinYang,    activeColor: '#6c4ff6' },
+}
 const MOOD_TYPES = ['happy', 'calm', 'stressed', 'neutral']
 
-/* Phosphor іконки замість емодзі — duotone для виразності */
-const MOOD_ICONS = {
-  happy:    <SmileyWink   size={20} weight="duotone" />,
-  calm:     <Cloud        size={20} weight="duotone" />,
-  stressed: <FireSimple   size={20} weight="duotone" />,
-  neutral:  <CircleDashed size={20} weight="duotone" />,
-}
-
 export default function MoodSwitcher() {
-  const { t } = useTranslation()
+  const { t }       = useTranslation()
   const currentMood = useMoodStore((s) => s.currentMood)
   const setMood     = useMoodStore((s) => s.setMood)
 
@@ -21,16 +19,26 @@ export default function MoodSwitcher() {
     <div className="mood-switcher">
       <div className="switcher-label">{t('mood_switcher.label')}</div>
       <div className="switcher-btns">
-        {MOOD_TYPES.map((mood) => (
-          <button
-            key={mood}
-            className={`switcher-btn ${currentMood === mood ? 'active' : ''}`}
-            onClick={() => setMood(mood)}
-          >
-            <span className="sb-emoji">{MOOD_ICONS[mood]}</span>
-            {t(`demo.options.${mood}.name`)}
-          </button>
-        ))}
+        {MOOD_TYPES.map((mood) => {
+          const { Icon, activeColor } = MOOD_CONFIG[mood]
+          const isActive = currentMood === mood
+          return (
+            <button
+              key={mood}
+              className={`switcher-btn ${isActive ? 'active' : ''}`}
+              onClick={() => setMood(mood)}
+            >
+              <span className="sb-emoji" style={{ display: 'flex', alignItems: 'center' }}>
+                <Icon
+                  size={18}
+                  weight={isActive ? 'fill' : 'duotone'}
+                  color={isActive ? activeColor : 'var(--text-muted)'}
+                />
+              </span>
+              {t(`demo.options.${mood}.name`)}
+            </button>
+          )
+        })}
       </div>
     </div>
   )
