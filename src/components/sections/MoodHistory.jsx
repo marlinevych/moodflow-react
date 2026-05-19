@@ -8,8 +8,12 @@ import {
 } from 'recharts'
 
 import {
-  Smiley, Cloud, Lightning, Sun,
-  ClipboardText, ChartLineUp, Sparkle
+  SmileyWink,
+  CloudSun,
+  Flame,
+  YinYang,
+  ClipboardText,
+  ChartLineUp,
 } from '@phosphor-icons/react'
 
 import { useMoodStore } from '../../store/useMoodStore'
@@ -27,16 +31,16 @@ const SCALE_META = [
 /* ── mood → icon map ─────────────────────────────────────── */
 const MOOD_ICONS = {
   happy: {
-    Icon: Smiley,
+    Icon: SmileyWink,
   },
   calm: {
-    Icon: Cloud,
+    Icon: CloudSun,
   },
   stressed: {
-    Icon: Lightning,
+    Icon: Flame,
   },
   neutral: {
-    Icon: Sparkle,
+    Icon: YinYang,
   },
 }
 
@@ -71,7 +75,7 @@ function CustomTooltip({ active, payload }) {
 function HistoryCard({ entry, index, onDelete }) {
   const { t, i18n } = useTranslation()
 
-  const MoodIcon = MOOD_ICONS[entry.mood]?.Icon ?? Sparkle
+  const MoodIcon = MOOD_ICONS[entry.mood]?.Icon ?? YinYang
 
   return (
     <motion.div
@@ -207,6 +211,8 @@ export default function MoodHistory() {
     color:      activeTab === tab ? '#fff' : 'var(--text-secondary)',
   })
 
+  const lastMood = history.at(-1)?.mood
+  const LastMoodIcon = MOOD_ICONS[lastMood]?.Icon ?? YinYang
   return (
     <section id="history">
       <div className="container">
@@ -242,7 +248,7 @@ export default function MoodHistory() {
                 {[
                   { label: t('history.stats.tests_count'), value: history.length, Icon: ClipboardText },
                   { label: t('history.stats.avg_index'), value: avgIndex ?? '—', Icon: ChartLineUp },
-                  { label: t('history.stats.last_state'), value: t(`mood.${history.at(-1)?.mood}`) ?? '—', Icon: Sparkle },
+                  { label: t('history.stats.last_state'), value: t(`mood.${lastMood}`) ?? '—', Icon: LastMoodIcon },
                 ].map(({ label, value, Icon }) => (
                   <motion.div
                     key={label}
