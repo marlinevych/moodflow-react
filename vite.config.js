@@ -14,7 +14,7 @@ export default defineConfig({
       includeAssets: ['favicon.svg', 'icons/*.svg', 'icons/*.png', 'locales/*.json'],
       manifest: {
         "short_name": "MoodFlow",
-        "name": "MoodFlow — Дізнайся свій настрій",
+        "name": "MoodFlow – Дізнайся свій настрій",
         "icons": [
           {
             "src": "icons/pwa-192.png",
