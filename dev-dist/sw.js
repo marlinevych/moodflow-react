@@ -81,7 +81,7 @@ define(['./workbox-709a0e9a'], (function (workbox) { 'use strict';
     "revision": "3ca0b8505b4bec776b69afdba2768812"
   }, {
     "url": "/moodflow-react/index.html",
-    "revision": "0.qc3b7umtr14"
+    "revision": "0.p28fqvvq5tg"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/moodflow-react/index.html"), {

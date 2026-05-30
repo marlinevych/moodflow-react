@@ -3,15 +3,28 @@
   "name": "MoodFlow — Дізнайся свій настрій",
   "icons": [
     {
-      "src": "/icons/pwa-192.png",
+      "src": "icons/pwa-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/icons/pwa-512.png",
+      "src": "icons/pwa-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
+  ],
+  "screenshots": [
+  {
+    "src": "icons/screenshot-desktop.png",
+    "sizes": "1280x720",
+    "type": "image/png",
+    "form_factor": "wide"
+  },
+  {
+    "src": "icons/screenshot-mobile.png",
+    "sizes": "720x1280",
+    "type": "image/png"
+  }
   ],
   "start_url": "/",
   "background_color": "#ffffff",

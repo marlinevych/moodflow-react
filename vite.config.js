@@ -10,7 +10,8 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/*.svg', 'icons/*.png'],
+      // ВИПРАВЛЕНО: Об'єднали обидва includeAssets в один масив, щоб прибрати помилку [duplicate-object-key]
+      includeAssets: ['favicon.svg', 'icons/*.svg', 'icons/*.png', 'locales/*.json'],
       manifest: {
         "short_name": "MoodFlow",
         "name": "MoodFlow — Дізнайся свій настрій",
@@ -26,15 +27,34 @@ export default defineConfig({
             "sizes": "512x512"
           }
         ],
+        // ВИПРАВЛЕНО: Додали скріншоти, щоб прибрати попередження Richer PWA Install UI на десктопі та мобілці
+        "screenshots": [
+          {
+            "src": "icons/screenshot-desktop.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide"
+          },
+          {
+            "src": "icons/screenshot-mobile.png",
+            "sizes": "720x1280",
+            "type": "image/png"
+          }
+        ],
         "start_url": "./",
         "background_color": "#ffffff",
         "display": "standalone",
         "theme_color": "#4d00ed"
       },
       workbox: {
-        // КРИТИЧНО: Віддавати index.html для будь-якого шляху в офлайні
+        // КРИТИЧНО: Віддавати index.html для будь-завгодно шляху в офлайні
         navigateFallback: '/moodflow-react/index.html',
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        
+        // ВИПРАВЛЕНО: Збільшуємо ліміт ваги файлів для кешу до 7 МБ (7 * 1024 * 1024), 
+        // щоб твій важкий мобільний скріншот не викликав помилку під час npm run build
+        maximumFileSizeToCacheInBytes: 7340032,
+
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com/,
@@ -55,7 +75,6 @@ export default defineConfig({
           },
         ],
       },
-      includeAssets: ['favicon.svg', 'locales/*.json', 'icons/*.png'],
       devOptions: {
         enabled: true, // Дозволяє тестувати в dev-режимі
       },
