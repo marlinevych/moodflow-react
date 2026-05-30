@@ -41,7 +41,7 @@ export default defineConfig({
             "type": "image/png"
           }
         ],
-        "start_url": "./",
+        "start_url": "/moodflow-react/",
         "background_color": "#ffffff",
         "display": "standalone",
         "theme_color": "#4d00ed"
