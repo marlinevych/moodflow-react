@@ -1,12 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
-/**
- * Іконки SVG з папки public/icons/
- * Колір задається через CSS-змінну --icon-filter на :root,
- * яка оновлюється в App.jsx при зміні теми.
- * filter: var(--icon-filter) перефарбовує будь-яку SVG з темного на потрібний колір.
- */
 const STEPS = [
   { num: '01', icon: 'icons/heart-hand.svg', alt: 'heart', key: 'step1' },
   { num: '02', icon: 'icons/brain_white.svg', alt: 'brain', key: 'step2' },
@@ -21,7 +15,7 @@ function StepCard({ num, icon, alt, titleKey, descKey, delay }) {
     <div
       ref={ref}
       className={`step-card reveal reveal-delay-${delay}`}
-      // a11y: кожна картка — article зі своїм заголовком
+      //кожна картка — article зі своїм заголовком
     >
       <span className="step-num" aria-hidden="true">{num}</span>
       <div className="step-icon" aria-hidden="true">

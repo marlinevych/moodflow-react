@@ -8,11 +8,6 @@ import { MOODS } from '../../data/moods'
 
 const BAR_LABELS = ['scales.joy', 'scales.calm', 'scales.energy', 'scales.focus']
 
-/**
- * Конфіг орбу — іконка + градієнт для кожного настрою.
- * Показується ЗАВЖДИ (і при прямому виборі, і після тесту).
- * Після тесту emoji більше не ставиться — тільки іконка з результуючим mood.
- */
 const MOOD_ORB = {
   neutral:  {
     Icon:     YinYang,
@@ -42,11 +37,6 @@ export default function Hero() {
   const lastResult   = useMoodStore((s) => s.lastResult)
   const moodData     = MOODS[currentMood] ?? MOODS.neutral
 
-  /**
-   * Орб завжди показує іконку поточного настрою.
-   * Якщо є lastResult — беремо mood з нього (він може відрізнятись від currentMood
-   * лише якщо тест не застосований, тому безпечно брати currentMood).
-   */
   const isTestResult = lastResult?.mood === currentMood
   const orbMood      = currentMood
   const { Icon, gradient, glow } = MOOD_ORB[orbMood] ?? MOOD_ORB.neutral
@@ -68,7 +58,7 @@ export default function Hero() {
       <div className="container">
         <div className="hero-grid">
 
-          {/* ── Лівий блок ── */}
+          {/*лівий блок*/}
           <div className="hero-content">
             <div className="hero-badge">
               <Sparkle size={15} weight="fill" />
@@ -86,11 +76,9 @@ export default function Hero() {
             </button>
           </div>
 
-          {/* ── Карточка ── */}
           <div className="hero-visual">
             <div className="hero-card">
 
-              {/* Орб — завжди іконка, колір змінюється з настроєм */}
               <div
                 className="mood-orb"
                 style={{
@@ -102,7 +90,7 @@ export default function Hero() {
                 <Icon size={52} weight="duotone" color="white" />
               </div>
 
-              {/* Шкали */}
+              {/*шкали */}
               <div className="mood-bars">
                 {BAR_LABELS.map((labelKey, i) => (
                   <div className="mood-bar-row" key={labelKey}>

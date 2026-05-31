@@ -17,7 +17,6 @@ function TestimonialCard({ id, gradient, delay }) {
       <div className="stars">★★★★★</div>
       <p>"{t(`testimonials.items.${id}.text`)}"</p>
       <div className="testimonial-author">
-        {/* Одна іконка UserCircle — різний градієнт фону */}
         <div className="author-avatar" style={{ background: gradient }}>
           <UserCircle size={28} weight="duotone" color="white" />
         </div>

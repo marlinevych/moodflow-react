@@ -63,7 +63,7 @@ export default function QuizResult({ result, onApply, onRetry }) {
     return () => clearTimeout(timer)
   }, [scores, totalIndex])
 
-  /* ── PDF export ── */
+  //pdf export
   const downloadPDF = async () => {
     try {
       const doc        = new jsPDF()
@@ -113,7 +113,6 @@ export default function QuizResult({ result, onApply, onRetry }) {
   return (
     <div className="quiz-results" role="region" aria-label={t('quiz.results_label')}>
 
-      {/* ── Орб результату — Phosphor іконка, кольоровий градієнт ── */}
       <div className="quiz-results-header">
         <div
           className="results-emoji-orb"
@@ -124,8 +123,6 @@ export default function QuizResult({ result, onApply, onRetry }) {
         <h2 className="results-mood-title">{t(`demo.results.${mood}.badge`)}</h2>
         <p className="results-mood-desc">{t(`demo.results.${mood}.text`)}</p>
       </div>
-
-      {/* ── Шкали — Phosphor іконки ── */}
       <div className="quiz-scales">
         {SCALES.map(({ key, label, Icon, color, cls }) => (
           <div key={key} className={`quiz-scale-row ${cls}`}>
@@ -149,7 +146,6 @@ export default function QuizResult({ result, onApply, onRetry }) {
         ))}
       </div>
 
-      {/* ── Індекс ── */}
       <div className="quiz-total-index">
         <div className="index-number" ref={indexRef}>0</div>
         <div className="index-info">
@@ -158,13 +154,11 @@ export default function QuizResult({ result, onApply, onRetry }) {
         </div>
       </div>
 
-      {/* ── AI рекомендації ── */}
       <AIRecommendations
         result={result}
         language={i18n.language === 'uk' ? 'uk' : 'en'}
       />
 
-      {/* ── Кнопки ── */}
       <div className="quiz-results-actions">
         <button className="btn-apply-mood" onClick={onApply}>{t('quiz.apply')}</button>
         <button className="btn-export-pdf" onClick={downloadPDF}>{t('quiz.export_pdf')}</button>

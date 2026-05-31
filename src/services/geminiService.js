@@ -56,10 +56,9 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature:     0.8, // Жива творчість ШІ
+          temperature:     0.8, 
           maxOutputTokens: 600,
           topP:            0.95,
-          // МИ ПОВНІСТЮ ПРИБРАЛИ ВСІ ВЕРЕДЛИВІ ПАРАМЕТРИ JSON-РЕЖИМІВ
         },
       }),
     });
@@ -75,7 +74,7 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
     const data = await response.json()
     const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
 
-    // Парсимо текстові рядки розділені символом '|'
+    //парсимо текстові рядки розділені |
     const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.includes('|'))
 
     if (lines.length === 0) {
@@ -83,7 +82,7 @@ export async function getRecommendations({ apiKey, scores, totalIndex, mood, lan
       throw new Error('PARSE_ERROR')
     }
 
-    // Перетворюємо унікальний текст ШІ на об'єкти для React
+    //текст ШІ на об'єкти для React
     const recommendations = lines.map(line => {
       const [type, title, text] = line.split('|')
       const cleanType = type?.trim().toLowerCase();

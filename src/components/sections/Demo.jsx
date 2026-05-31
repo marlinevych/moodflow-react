@@ -6,11 +6,6 @@ import { useScrollReveal } from '../../hooks/useScrollReveal'
 
 const MOOD_TYPES = ['happy', 'calm', 'stressed', 'neutral']
 
-/**
- * Phosphor іконки + кольори для карток вибору.
- * activeColor — колір іконки коли картка активна або при ховері.
- * baseColor   — приглушений колір у дефолтному стані.
- */
 const MOOD_CONFIG = {
   happy:    { Icon: SmileyWink, activeColor: '#f59e0b', baseColor: '#fbbf24' },
   calm:     { Icon: CloudSun,   activeColor: '#059669', baseColor: '#34d399' },
@@ -46,7 +41,7 @@ export default function Demo() {
 
         <div ref={wrapRef} className="demo-wrapper reveal">
 
-          {/* ── Кнопка запуску тесту ── */}
+          {/*кнопка запуску тесту */}
           <div className="quiz-trigger-wrap">
             <span className="quiz-trigger-label">{t('demo.quiz_label')}</span>
             <button className="btn-quiz-trigger" onClick={openQuiz}>
@@ -59,7 +54,7 @@ export default function Demo() {
 
           <div className="demo-question">{t('demo.question')}</div>
 
-          {/* ── Картки вибору настрою ── */}
+          {/*картки вибору настрою */}
           <div className="mood-options">
             {MOOD_TYPES.map((mood) => {
               const { Icon, activeColor, baseColor } = MOOD_CONFIG[mood]
@@ -70,7 +65,6 @@ export default function Demo() {
                   className={`mood-opt ${isActive ? 'active' : ''}`}
                   onClick={() => handleDirectMoodSelect(mood)}
                 >
-                  {/* Кругла іконка — замість opt-emoji */}
                   <div className="mood-opt-icon" style={{
                     width:          56,
                     height:         56,
@@ -98,7 +92,6 @@ export default function Demo() {
             })}
           </div>
 
-          {/* Результат */}
           <div className="demo-result">
             <div className="demo-result-label">
               <div className="result-dot" />

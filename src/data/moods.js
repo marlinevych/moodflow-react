@@ -1,9 +1,3 @@
-/**
- * moods.js
- * Конфігурація кожної теми настрою.
- * cssVars застосовуються на :root через App.jsx при зміні теми.
- */
-
 export const MOODS = {
   neutral: {
     label:  'Нейтральний',

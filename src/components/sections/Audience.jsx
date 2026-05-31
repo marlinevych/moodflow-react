@@ -2,11 +2,6 @@ import { useTranslation } from 'react-i18next'
 import { GraduationCap, PaintBrush, Briefcase } from '@phosphor-icons/react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
-/**
- * Кожна картка отримує свій колір іконки + градієнт фону.
- * Градієнти — фіксовані кольори (не залежать від теми),
- * щоб аудиторія завжди виглядала яскраво.
- */
 const AUDIENCE_ITEMS = [
   {
     id:   's1',
@@ -34,7 +29,6 @@ function AudienceCard({ id, Icon, gradient, shadow, delay }) {
 
   return (
     <div ref={ref} className={`audience-card reveal reveal-delay-${delay}`}>
-      {/* Кольоровий круг з іконкою замість емодзі */}
       <div style={{
         width:          72,
         height:         72,
@@ -45,7 +39,6 @@ function AudienceCard({ id, Icon, gradient, shadow, delay }) {
         justifyContent: 'center',
         margin:         '0 auto 20px',
         boxShadow:      `0 12px 32px ${shadow}`,
-        /* анімація замість .audience-emoji sway */
         animation:      'orb-pulse 3s ease-in-out infinite',
         flexShrink:     0,
       }}>

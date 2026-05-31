@@ -123,7 +123,7 @@ export default function AIRecommendations({ result, language = 'uk' }) {
     <div style={wrap}>
       <AnimatePresence mode="wait">
 
-        {/* ══ IDLE ══ */}
+        {/*idle*/}
         {state === 'idle' && (
           <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             style={{ ...pad, textAlign: 'center' }}>
@@ -158,7 +158,7 @@ export default function AIRecommendations({ result, language = 'uk' }) {
           </motion.div>
         )}
 
-        {/* ══ KEY PROMPT ══ */}
+        {/*hey prompt*/}
         {state === 'key_prompt' && (
           <motion.div key="key_prompt" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
             style={pad}>
@@ -207,7 +207,7 @@ export default function AIRecommendations({ result, language = 'uk' }) {
           </motion.div>
         )}
 
-        {/* ══ LOADING ══ */}
+        {/*loading*/}
         {state === 'loading' && (
           <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             style={{ ...pad, textAlign: 'center', paddingTop: 36, paddingBottom: 36 }}>
@@ -224,7 +224,7 @@ export default function AIRecommendations({ result, language = 'uk' }) {
           </motion.div>
         )}
 
-        {/* ══ DONE ══ */}
+        {/*done*/}
         {state === 'done' && (
           <motion.div key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <div style={{
@@ -251,7 +251,6 @@ export default function AIRecommendations({ result, language = 'uk' }) {
             </div>
             <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
               {recommendations.map((rec, i) => {
-                // Мапимо текстовий тип від Gemini на твої реальні SVG-файли (без початкового слеша)
                 const iconMap = {
                   light: 'icons/light_white.svg',
                   brain: 'icons/brain_white.svg',
@@ -267,15 +266,14 @@ export default function AIRecommendations({ result, language = 'uk' }) {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
                     style={{
-                      display: 'flex', gap: 14, alignItems: 'center', // вирівнюємо по центру для акуратності
+                      display: 'flex', gap: 14, alignItems: 'center', 
                       background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)',
                       borderRadius: 14, padding: '14px 16px',
                     }}>
                     
-                    {/* Мінімалістичний контейнер для SVG-іконки замість емодзі */}
                     <div style={{
                       width: 38, height: 38, borderRadius: 10,
-                      background: 'var(--bg-secondary)', // або твоє фірмове забарвлення
+                      background: 'var(--bg-secondary)', 
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       flexShrink: 0
                     }}>
@@ -301,7 +299,6 @@ export default function AIRecommendations({ result, language = 'uk' }) {
           </motion.div>
         )}
 
-        {/* ══ ERROR ══ */}
         {state === 'error' && (
           <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             style={{ ...pad, textAlign: 'center' }}>

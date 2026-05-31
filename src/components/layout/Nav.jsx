@@ -31,7 +31,6 @@ export default function Nav() {
 
   return (
     <>
-      {/* Skip-link тепер має клас для приховування в CSS */}
       <a href="#demo" className="skip-link">
         {t('a11y.skip_nav')}
       </a>
@@ -65,7 +64,6 @@ export default function Nav() {
             </li>
           </ul>
 
-          {/* Оновлений мінімалістичний перемикач */}
           <button
             className="lang-switcher-btn"
             onClick={toggleLang}

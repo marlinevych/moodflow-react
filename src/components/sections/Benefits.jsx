@@ -29,7 +29,6 @@ function BenefitCard({ icon, alt, titleKey, delay }) {
         />
       </div>
       <div>
-        {/* Ключі мають бути benefits.b1_title, benefits.b1_desc і т.д. */}
         <h3>{t(`benefits.${titleKey}_title`)}</h3>
         <p>{t(`benefits.${titleKey}_desc`)}</p>
       </div>

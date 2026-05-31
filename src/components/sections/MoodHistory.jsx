@@ -19,7 +19,6 @@ import {
 import { useMoodStore } from '../../store/useMoodStore'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
-/* ── Мета-дані шкал ──────────────────────────────────────── */
 const SCALE_META = [
   { key: 'joy',    labelKey: 'scales.joy',    color: '#f59e0b' },
   { key: 'calm',   labelKey: 'scales.calm',   color: '#059669' },
@@ -28,7 +27,6 @@ const SCALE_META = [
   { key: 'stress', labelKey: 'scales.stress', color: '#dc2626' },
 ]
 
-/* ── mood → icon map ─────────────────────────────────────── */
 const MOOD_ICONS = {
   happy: {
     Icon: SmileyWink,
@@ -51,7 +49,7 @@ function formatDate(iso, locale = 'uk-UA') {
   })
 }
 
-/* ── Кастомний тултіп ────────────────────────────────────── */
+/* кастомний тултіп*/
 function CustomTooltip({ active, payload }) {
   const { t } = useTranslation()
   if (!active || !payload?.length) return null
@@ -71,7 +69,7 @@ function CustomTooltip({ active, payload }) {
   )
 }
 
-/* ── Картка одного запису ────────────────────────────────── */
+/* картка одного запису*/
 function HistoryCard({ entry, index, onDelete }) {
   const { t, i18n } = useTranslation()
 
@@ -120,7 +118,6 @@ function HistoryCard({ entry, index, onDelete }) {
         </div>
       </div>
 
-      {/* mini bars (без змін логіки) */}
       <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end' }}>
         {SCALE_META.map(({ key, color }) => (
           <div
@@ -166,7 +163,7 @@ function HistoryCard({ entry, index, onDelete }) {
   )
 }
 
-/* ── Головний компонент ───────────────────────────────────── */
+/* головний компонент */
 export default function MoodHistory() {
   const { t, i18n } = useTranslation()
   const history           = useMoodStore((s) => s.history)
@@ -196,7 +193,7 @@ export default function MoodHistory() {
     ? (last10.reduce((s, e) => s + (e.totalIndex ?? 0), 0) / last10.length).toFixed(1)
     : null
 
-  /* Стиль таб-кнопок */
+  /*стиль таб-кнопок */
   const tabStyle = (tab) => ({
     padding: '8px 20px',
     borderRadius: 50,
@@ -239,11 +236,7 @@ export default function MoodHistory() {
             </motion.div>
           ) : (
             <>
-              {/* ── Статистика ──
-                  ВАЖЛИВО: className="history-stats-grid" — керується через CSS,
-                  тому адаптивність працює через медіа-запити (не inline style).
-                  Десктоп: 3 колонки. Мобільний ≤600px: 2 колонки, остання span 2.
-              ── */}
+
               <div className="history-stats-grid">
                 {[
                   { label: t('history.stats.tests_count'), value: history.length, Icon: ClipboardText },
@@ -271,7 +264,7 @@ export default function MoodHistory() {
                 ))}
               </div>
 
-              {/* ── Таб-перемикач ── */}
+              {/*таб перемикач*/}
               <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
                 <button style={tabStyle('radar')} onClick={() => setActiveTab('radar')}>
                   {t('history.tabs.radar')}
@@ -281,12 +274,12 @@ export default function MoodHistory() {
                 </button>
               </div>
 
-              {/* ── Графік ── */}
+              {/*графік*/}
               <div style={{
                 background: 'var(--bg-card)', border: '1px solid var(--bg-card-border)',
                 borderRadius: 'var(--border-radius)', padding: '24px',
                 marginBottom: 24, boxShadow: 'var(--card-shadow)',
-                overflow: 'hidden',   /* запобігає виходу графіка за межі */
+                overflow: 'hidden',  
               }}>
                 <AnimatePresence mode="wait">
                   {activeTab === 'radar' ? (
@@ -386,7 +379,7 @@ export default function MoodHistory() {
                 </AnimatePresence>
               </div>
 
-              {/* ── Список записів ── */}
+              {/*список записів*/}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
                 <AnimatePresence>
                   {[...history].reverse().map((entry, i) => (
@@ -400,7 +393,7 @@ export default function MoodHistory() {
                 </AnimatePresence>
               </div>
 
-              {/* ── Очистити ── */}
+              {/*очистити*/}
               <div style={{ textAlign: 'center' }}>
                 <button
                   onClick={clearHistory}

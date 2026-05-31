@@ -6,7 +6,7 @@ export default function QuizQuestion({ question, questionIndex, total, onAnswer 
   const [selected, setSelected] = useState(null)
   const isLast = questionIndex + 1 === total
 
-  // Скидаємо вибір при кожному новому питанні
+  //скидаємо вибір при кожному новому питанні
   useEffect(() => {
     setSelected(null)
   }, [question])
@@ -16,12 +16,12 @@ export default function QuizQuestion({ question, questionIndex, total, onAnswer 
     onAnswer(selected)
   }
 
-  // Розрахунок точок прогресу (крапочки внизу)
+  //розрахунок точок прогресу
   const block = Math.ceil(total / 2)
   const firstRow = Array.from({ length: Math.min(block, total) })
   const secondRow = Array.from({ length: Math.max(0, total - block) })
 
-  // Мітки PA/NA
+  //мітки PA/NA
   const panasLabel = question.panas === 'PA'
     ? { text: t('quiz.pa_label') || 'PA', color: 'var(--accent)' }
     : { text: t('quiz.na_label') || 'NA', color: '#dc2626' }
@@ -49,7 +49,6 @@ export default function QuizQuestion({ question, questionIndex, total, onAnswer 
             </span>
           </div>
 
-          {/* ВИПРАВЛЕНО: Використовуємо question.text (готовий переклад) */}
           <h2 className="quiz-q-text">{question.text}</h2>
 
           <div className="quiz-answers">
@@ -60,8 +59,7 @@ export default function QuizQuestion({ question, questionIndex, total, onAnswer 
                 onClick={() => setSelected(idx)}
               >
                 <span className="answer-letter">{String.fromCharCode(65 + idx)}</span>
-                
-                {/* ВИПРАВЛЕНО: Прибрали емодзі, використовуємо ans.text */}
+
                 <span className="answer-text-content">{ans.text}</span>
               </button>
             ))}

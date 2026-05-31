@@ -21,7 +21,6 @@ export default function QuizStart({ onStart }) {
       gap: 24, paddingTop: 8,
     }}>
 
-      {/* Brain іконка замість 🧠 — duotone для глибини */}
       <div style={{
         width: 88, height: 88,
         borderRadius: '50%',
@@ -49,7 +48,6 @@ export default function QuizStart({ onStart }) {
         </p>
       </div>
 
-      {/* Таблетки шкал — без емодзі, тільки текст */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
         {labels.map((label) => (
           <span key={label} style={{

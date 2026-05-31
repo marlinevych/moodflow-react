@@ -1,13 +1,3 @@
-/**
- * useScrollReveal.js
- * Хук для анімації появи елементів при скролі.
- * Повертає ref — прикріплюй до будь-якого DOM-елемента.
- *
- * Використання:
- *   const ref = useScrollReveal()
- *   <div ref={ref} className="reveal"> ... </div>
- */
-
 import { useEffect, useRef } from 'react'
 
 export function useScrollReveal(options = {}) {
@@ -21,7 +11,6 @@ export function useScrollReveal(options = {}) {
       ([entry]) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible')
-          // Після появи — відключаємо спостереження (одноразова анімація)
           observer.unobserve(entry.target)
         }
       },

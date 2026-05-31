@@ -5,22 +5,20 @@ export const useMoodStore = create(
   persist(
     (set) => ({
 
-      /* ── Поточна тема ──────────────────────────────────── */
       currentMood: 'neutral',
       setMood: (mood) => set({ currentMood: mood }),
 
-      /* ── Стан модального квізу ─────────────────────────── */
+      /*стан модального квізу*/
       quizOpen: false,
       openQuiz:  () => set({ quizOpen: true }),
       closeQuiz: () => set({ quizOpen: false }),
 
-      /* ── Останній результат тесту (для hero-карточки) ──── */
-      // null = тест ще не проходився, показуємо дефолтні дані теми
+      /*останній результат тесту (для hero-карточки)*/
+      //null = тест ще не проходився, показуємо дефолтні дані теми
       lastResult: null,
       setLastResult: (result) => set({ lastResult: result }),
 
-      /* ── Історія результатів (для графіка динаміки) ─────── */
-      // Кожен запис: { date, mood, scores, totalIndex }
+      /*історія результатів для графіка динаміки */
       history: [],
       addToHistory: (entry) =>
         set((state) => ({
@@ -33,7 +31,7 @@ export const useMoodStore = create(
 
     }),
     {
-      name: 'moodflow-storage', // ключ у localStorage
+      name: 'moodflow-storage', //ключ у localStorage
     }
   )
 )
